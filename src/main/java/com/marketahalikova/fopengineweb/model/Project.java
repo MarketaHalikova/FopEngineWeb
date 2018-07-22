@@ -2,17 +2,24 @@ package com.marketahalikova.fopengineweb.model;
 
 import com.marketahalikova.fopengineweb.enums.ProjectStatus;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
 public class Project {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String projectName;
     private String gitPath;
     private String description;
+    @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
+    @OneToMany (mappedBy = "project", cascade = CascadeType.ALL)
+    // cascade
     private Set<Font> fontSet;
 
 

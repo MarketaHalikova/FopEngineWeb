@@ -1,12 +1,17 @@
 package com.marketahalikova.fopengineweb.model;
 
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
 public class Font {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fontName;
+    @ManyToOne
+    private Project project;
 
 
     public Font() {
