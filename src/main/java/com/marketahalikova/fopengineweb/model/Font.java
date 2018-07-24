@@ -22,7 +22,6 @@ public class Font {
         this.fontName = fontName;
     }
 
-
     public String getFontName() {
         return fontName;
     }
@@ -37,6 +36,14 @@ public class Font {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     @Override

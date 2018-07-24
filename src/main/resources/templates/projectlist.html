@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Recipe Home</title>
+</head>
+<body>
+<h1>All Projects!</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+    </tr>
+    <!--/*@thymesVar id="project" type="com.marketahalikova.fopengineweb.model.Project"*/-->
+    <tr th:each="project : ${projectList}">
+        <td th:text="${project.id}"></td>
+        <td th:text="${project.projectName}"></td>
+    </tr>
+</table>
+</body>
+</html>

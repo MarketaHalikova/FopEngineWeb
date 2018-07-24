@@ -18,8 +18,12 @@ public class Project {
     private String description;
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
+
     @OneToMany (mappedBy = "project", cascade = CascadeType.ALL)
     // cascade
+
+//    @OneToMany (cascade = CascadeType.ALL)
+//    @JoinColumn(name="project_id")
     private Set<Font> fontSet;
 
 
