@@ -1,12 +1,13 @@
 package com.marketahalikova.fopengineweb.model;
 
 import com.marketahalikova.fopengineweb.enums.ProjectStatus;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
+@Data
 @Entity
 public class Project {
 
@@ -18,14 +19,8 @@ public class Project {
     private String description;
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
-
     @OneToMany (mappedBy = "project", cascade = CascadeType.ALL)
-    // cascade
-
-//    @OneToMany (cascade = CascadeType.ALL)
-//    @JoinColumn(name="project_id")
     private Set<Font> fontSet;
-
 
     public Project() {
         fontSet = new HashSet<>();
@@ -38,76 +33,9 @@ public class Project {
         this.gitPath = gitPath;
     }
 
-    public Long getId() {
-        return id;
+    public void addFont(Font font){
+        fontSet.add(font);
+        font.setProject(this);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getGitPath() {
-        return gitPath;
-    }
-
-    public void setGitPath(String gitPath) {
-        this.gitPath = gitPath;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public ProjectStatus getProjectStatus() {
-        return projectStatus;
-    }
-
-    public void setProjectStatus(ProjectStatus projectStatus) {
-        this.projectStatus = projectStatus;
-    }
-
-    public Set<Font> getFontSet() {
-        return fontSet;
-    }
-
-    public void setFontSet(Set<Font> fontSet) {
-        this.fontSet = fontSet;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Project project = (Project) o;
-        return Objects.equals(id, project.id) &&
-                Objects.equals(projectName, project.projectName) &&
-                Objects.equals(gitPath, project.gitPath) &&
-                Objects.equals(description, project.description) &&
-                projectStatus == project.projectStatus &&
-                Objects.equals(fontSet, project.fontSet);
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", projectName='" + projectName + '\'' +
-                ", gitPath='" + gitPath + '\'' +
-                ", description='" + description + '\'' +
-                ", projectStatus=" + projectStatus +
-                ", fontSet=" + fontSet +
-                '}';
-    }
 }

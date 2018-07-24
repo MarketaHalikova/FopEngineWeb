@@ -20,9 +20,5 @@ public class ProjectListController {
         model.addAttribute("projectList", projectService.getProjects());
 
         return "projectlist";
-
-
-
-
     }
 }

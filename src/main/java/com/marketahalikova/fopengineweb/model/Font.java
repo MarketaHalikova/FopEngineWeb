@@ -1,11 +1,15 @@
 package com.marketahalikova.fopengineweb.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
 
+@Data
 @Entity
+@NoArgsConstructor
 public class Font {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,53 +17,8 @@ public class Font {
     @ManyToOne
     private Project project;
 
-
-    public Font() {
-    }
-
     public Font(String fontName) {
         this();
         this.fontName = fontName;
-    }
-
-    public String getFontName() {
-        return fontName;
-    }
-
-    public void setFontName(String fontName) {
-        this.fontName = fontName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Font font = (Font) o;
-        return Objects.equals(id, font.id) &&
-                Objects.equals(fontName, font.fontName);
-    }
-
-    @Override
-    public String toString() {
-        return "Font{" +
-                "id=" + id +
-                ", fontName='" + fontName + '\'' +
-                '}';
     }
 }
