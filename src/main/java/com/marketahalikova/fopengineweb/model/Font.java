@@ -1,13 +1,13 @@
 package com.marketahalikova.fopengineweb.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@NoArgsConstructor
 public class Font {
 
     @Id
@@ -15,10 +15,11 @@ public class Font {
     private Long id;
     private String fontName;
     @ManyToOne
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Project project;
 
     public Font(String fontName) {
-        this();
         this.fontName = fontName;
     }
 }
