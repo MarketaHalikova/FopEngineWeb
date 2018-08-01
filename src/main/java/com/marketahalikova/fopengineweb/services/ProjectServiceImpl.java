@@ -5,6 +5,7 @@ import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -21,6 +22,18 @@ public class ProjectServiceImpl implements ProjectService{
         Set<Project> projects = new HashSet<>();
         projectRepository.findAll().forEach(projects::add);
         return projects;
+    }
+
+    @Override
+    public Project findById(Long l) {
+
+        Optional<Project> projectOptional = projectRepository.findById(l);
+
+        if (!projectOptional.isPresent()) {
+            throw new RuntimeException("Recipe Not Found!");
+        }
+
+        return projectOptional.get();
     }
 
 }

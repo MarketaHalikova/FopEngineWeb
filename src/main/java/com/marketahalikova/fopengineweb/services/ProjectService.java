@@ -6,4 +6,5 @@ import java.util.Set;
 
 public interface ProjectService {
     Set<Project> getProjects();
+    Project findById(Long l);
 }

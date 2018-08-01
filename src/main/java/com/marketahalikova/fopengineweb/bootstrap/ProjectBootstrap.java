@@ -38,12 +38,12 @@ public class ProjectBootstrap implements ApplicationListener<ContextRefreshedEve
         projects.add(project1);
 
         Project project2 = new Project("Project2", "git2");
-        project1.setDescription("description2");
+        project2.setDescription("description2");
 
         Font font2 = new Font("Font2");
         Font font3 = new Font("Font3");
-        project1.addFont(font2);;
-        project1.addFont(font3);
+        project2.addFont(font2);;
+        project2.addFont(font3);
         projects.add(project2);
 
         return  projects;
