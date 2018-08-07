@@ -1,5 +1,7 @@
 package com.marketahalikova.fopengineweb.services;
 
+import com.marketahalikova.fopengineweb.converters.ProjectCommandToProject;
+import com.marketahalikova.fopengineweb.converters.ProjectToProjectCommand;
 import com.marketahalikova.fopengineweb.exceptions.NotFoundException;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
@@ -22,13 +24,17 @@ public class ProjectServiceImplTest {
 
     @Mock
     ProjectRepository projectRepository;
+    @Mock
+    ProjectCommandToProject projectCommandToProject;
+    @Mock
+    ProjectToProjectCommand projectToProjectCommand;
 
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
        // projectRepository = mock(ProjectRepository.class);
-        projectService = new ProjectServiceImpl(projectRepository);
+        projectService = new ProjectServiceImpl(projectRepository, projectCommandToProject, projectToProjectCommand);
     }
 
     @Test

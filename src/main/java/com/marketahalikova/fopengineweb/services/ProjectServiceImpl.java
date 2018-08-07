@@ -1,21 +1,31 @@
 package com.marketahalikova.fopengineweb.services;
 
+import com.marketahalikova.fopengineweb.commands.ProjectCommand;
+import com.marketahalikova.fopengineweb.converters.ProjectCommandToProject;
+import com.marketahalikova.fopengineweb.converters.ProjectToProjectCommand;
 import com.marketahalikova.fopengineweb.exceptions.NotFoundException;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class ProjectServiceImpl implements ProjectService{
 
     private final ProjectRepository projectRepository;
+    private final ProjectToProjectCommand projectToProjectCommand;
+    private final ProjectCommandToProject projectCommandToProject;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectCommandToProject projectCommandToProject, ProjectToProjectCommand projectToProjectCommand) {
         this.projectRepository = projectRepository;
+        this.projectCommandToProject = projectCommandToProject;
+        this.projectToProjectCommand = projectToProjectCommand;
     }
 
     @Override
@@ -35,6 +45,16 @@ public class ProjectServiceImpl implements ProjectService{
         }
 
         return projectOptional.get();
+    }
+
+    @Transactional
+    @Override
+    public ProjectCommand saveProjectCommand(ProjectCommand projectCommand) {
+        Project detachedProject = projectCommandToProject.convert(projectCommand);
+
+        Project savedProject = projectRepository.save(detachedProject);
+        log.debug("Saved PtojectId:" + savedProject.getId());
+        return projectToProjectCommand.convert(savedProject);
     }
 
 }
