@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.services;
 
+import com.marketahalikova.fopengineweb.exceptions.NotFoundException;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import org.junit.Before;
@@ -26,7 +27,7 @@ public class ProjectServiceImplTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-
+       // projectRepository = mock(ProjectRepository.class);
         projectService = new ProjectServiceImpl(projectRepository);
     }
 
@@ -53,10 +54,22 @@ public class ProjectServiceImplTest {
 
         when(projectRepository.findById(anyLong())).thenReturn(projectOptional);
 
-        Project recipeReturned = projectService.findById(1L);
+        Project projectReturned = projectService.findById(1L);
 
-        assertNotNull("Null recipe returned", recipeReturned);
+        assertNotNull("Null recipe returned", projectReturned);
         verify(projectRepository, times(1)).findById(anyLong());
         verify(projectRepository, never()).findAll();
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getRecipeByIdTestNotFound() throws Exception {
+
+        Optional<Project> projectOptional = Optional.empty();
+
+        when(projectRepository.findById(anyLong())).thenReturn(projectOptional);
+
+        Project recipeReturned = projectService.findById(1L);
+
+        //should go boom
     }
 }

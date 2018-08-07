@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.services;
 
+import com.marketahalikova.fopengineweb.exceptions.NotFoundException;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService{
         Optional<Project> projectOptional = projectRepository.findById(l);
 
         if (!projectOptional.isPresent()) {
-            throw new RuntimeException("Recipe Not Found!");
+            throw new NotFoundException("Recipe Not Found");
         }
 
         return projectOptional.get();
