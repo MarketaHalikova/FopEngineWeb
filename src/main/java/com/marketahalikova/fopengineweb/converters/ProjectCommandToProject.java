@@ -18,6 +18,8 @@ public class ProjectCommandToProject implements Converter<ProjectCommand, Projec
             return null;
         }
         final Project project = new Project();
+
+
         project.setFontSet(projectCommand.getFontSet());
         project.setProjectStatus(projectCommand.getProjectStatus());
         project.setDescription(projectCommand.getDescription());

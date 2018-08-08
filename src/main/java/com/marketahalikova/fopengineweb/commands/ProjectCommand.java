@@ -18,6 +18,6 @@ public class ProjectCommand {
     private String projectName;
     private String gitPath;
     private String description;
-    private ProjectStatus projectStatus;
+    private ProjectStatus projectStatus = ProjectStatus.OK;
     private Set<Font> fontSet = new HashSet<>();
 }

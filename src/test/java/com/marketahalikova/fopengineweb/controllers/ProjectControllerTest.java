@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.controllers;
 
+import com.marketahalikova.fopengineweb.commands.ProjectCommand;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.services.ProjectService;
 import org.junit.Before;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class ProjectControllerTest {
 
+    public static final Long LONG = 1L;
     @Mock
     ProjectService projectService;
 
@@ -102,7 +104,7 @@ public class ProjectControllerTest {
     public void showByIdTest() throws Exception {
         // given
         Project project = new Project();
-        project.setId(1L);
+        project.setId(LONG);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -110,10 +112,38 @@ public class ProjectControllerTest {
 
         // when
         mockMvc.perform(get("/project/1/show"))
-                //than
+                //then
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("project", project))
                 .andExpect(model().attributeExists("project"))
                 .andExpect(view().name("project/show"));
     }
+
+    @Test
+    public void newRecipeFormTest() throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc.perform(get("/project/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("project/projectform"))
+                .andExpect(model().attributeExists("project"));
+    }
+
+    @Test
+    public void saveOrUpdateProjectTest() throws Exception {
+        // given
+        ProjectCommand projectCommand = new ProjectCommand();
+        projectCommand.setId(LONG);
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        when(projectService.saveProjectCommand(projectCommand)).thenReturn(projectCommand);
+
+        // when
+        mockMvc.perform(get("/project/" + projectCommand.getId() + "/show"))
+                //then
+                .andExpect(status().isOk())
+                .andExpect(view().name("project/show"));
+    }
+
 }
+

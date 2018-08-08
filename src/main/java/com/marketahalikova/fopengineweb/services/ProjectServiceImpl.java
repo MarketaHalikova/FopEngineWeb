@@ -53,7 +53,7 @@ public class ProjectServiceImpl implements ProjectService{
         Project detachedProject = projectCommandToProject.convert(projectCommand);
 
         Project savedProject = projectRepository.save(detachedProject);
-        log.debug("Saved PtojectId:" + savedProject.getId());
+        log.debug("Saved ProjectId:" + savedProject.getId());
         return projectToProjectCommand.convert(savedProject);
     }
 

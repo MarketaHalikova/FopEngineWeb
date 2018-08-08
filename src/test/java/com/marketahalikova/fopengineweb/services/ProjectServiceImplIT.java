@@ -39,7 +39,7 @@ public class ProjectServiceImplIT {
         //when
         projectCommand.setProjectStatus(NEW_PROJECT_STATUS);
         projectCommand.setProjectName(NEW_PROJECT_NAME);
-        //than
+        //then
         ProjectCommand savedProject = projectService.saveProjectCommand(projectCommand);
         assertThat(savedProject.getProjectName()).isEqualTo(NEW_PROJECT_NAME);
         assertThat(savedProject.getProjectStatus()).isEqualTo(NEW_PROJECT_STATUS);
