@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.services;
 
+import com.marketahalikova.fopengineweb.commands.ProjectCommand;
 import com.marketahalikova.fopengineweb.converters.ProjectCommandToProject;
 import com.marketahalikova.fopengineweb.converters.ProjectToProjectCommand;
 import com.marketahalikova.fopengineweb.exceptions.NotFoundException;
@@ -68,7 +69,7 @@ public class ProjectServiceImplTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void getRecipeByIdTestNotFound() throws Exception {
+    public void getProjectByIdTestNotFound() throws Exception {
 
         Optional<Project> projectOptional = Optional.empty();
 
@@ -77,5 +78,53 @@ public class ProjectServiceImplTest {
         Project recipeReturned = projectService.findById(1L);
 
         //should go boom
+    }
+
+    @Test
+    public void getProjectCommandByIdTest() throws Exception {
+        Project project = new Project();
+        project.setId(1L);
+        Optional<Project> projectOptional = Optional.of(project);
+
+        when(projectRepository.findById(anyLong())).thenReturn(projectOptional);
+
+        ProjectCommand projectCommand = new ProjectCommand();
+        projectCommand.setId(1L);
+
+        when(projectToProjectCommand.convert(any())).thenReturn(projectCommand);
+
+        ProjectCommand commandById = projectService.findCommandById(1L);
+
+        assertNotNull("Null project returned", commandById);
+        verify(projectRepository, times(1)).findById(anyLong());
+        verify(projectRepository, never()).findAll();
+    }
+
+    @Test
+    public void saveProjectCommandTest() throws Exception {
+
+        Project project = new Project();
+        ProjectCommand projectCommand = new ProjectCommand();
+        when(projectCommandToProject.convert(any())).thenReturn(project);
+        when(projectToProjectCommand.convert(any())).thenReturn(projectCommand);
+        when(projectRepository.save(any())).thenReturn(project);
+
+        ProjectCommand projectCommandSaved = projectService.saveProjectCommand(projectCommand);
+
+        assertNotNull("Null project returned", projectCommandSaved);
+        verify(projectRepository, times(1)).save(any());
+        verify(projectRepository, never()).saveAll(any());
+        verify(projectCommandToProject, times(1)).convert(any());
+        verify(projectToProjectCommand, times(1)).convert(any());
+    }
+
+    @Test
+    public void saveProjectTest() throws Exception {
+        Project project = new Project();
+        when(projectRepository.save(any())).thenReturn(project);
+        Project projectSaved = projectService.saveProject(any());
+        assertNotNull("Null project returned", projectSaved);
+        verify(projectRepository, times(1)).save(any());
+        verify(projectRepository, never()).saveAll(any());
     }
 }

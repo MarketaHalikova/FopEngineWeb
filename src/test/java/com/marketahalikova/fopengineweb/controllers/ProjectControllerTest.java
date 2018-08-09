@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
@@ -14,14 +15,16 @@ import org.springframework.ui.Model;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ProjectControllerTest {
 
-    public static final Long LONG = 1L;
+    public static final Long ID = 1L;
     @Mock
     ProjectService projectService;
 
@@ -104,7 +107,7 @@ public class ProjectControllerTest {
     public void showByIdTest() throws Exception {
         // given
         Project project = new Project();
-        project.setId(LONG);
+        project.setId(ID);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -120,7 +123,7 @@ public class ProjectControllerTest {
     }
 
     @Test
-    public void newRecipeFormTest() throws Exception {
+    public void newProjectFormTest() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         mockMvc.perform(get("/project/new"))
                 .andExpect(status().isOk())
@@ -132,18 +135,24 @@ public class ProjectControllerTest {
     public void saveOrUpdateProjectTest() throws Exception {
         // given
         ProjectCommand projectCommand = new ProjectCommand();
-        projectCommand.setId(LONG);
+        projectCommand.setId(ID);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        when(projectService.saveProjectCommand(projectCommand)).thenReturn(projectCommand);
+        when(projectService.saveProjectCommand(any())).thenReturn(projectCommand);
 
         // when
-        mockMvc.perform(get("/project/" + projectCommand.getId() + "/show"))
+        mockMvc.perform(post("/project")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("gitPath", "some gitPath")
+                    .param("description", "some string"))
                 //then
-                .andExpect(status().isOk())
-                .andExpect(view().name("project/show"));
-    }
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/project/" + projectCommand.getId() + "/show"));
+
+       }
+
+
 
 }
 

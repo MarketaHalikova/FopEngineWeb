@@ -9,4 +9,6 @@ public interface ProjectService {
     Set<Project> getProjects();
     Project findById(Long l);
     ProjectCommand saveProjectCommand(ProjectCommand projectCommand);
+    ProjectCommand findCommandById (Long l);
+    Project saveProject(Project project);
 }

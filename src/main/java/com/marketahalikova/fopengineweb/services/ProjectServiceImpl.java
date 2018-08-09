@@ -57,4 +57,17 @@ public class ProjectServiceImpl implements ProjectService{
         return projectToProjectCommand.convert(savedProject);
     }
 
+    @Transactional
+    @Override
+    public ProjectCommand findCommandById(Long l) {
+        return projectToProjectCommand.convert(findById(l));
+    }
+
+
+    @Override
+    public Project saveProject(Project detachedProject) {
+        Project savedProject = projectRepository.save(detachedProject);
+        log.debug("Saved project id: " + savedProject.getId());
+        return savedProject;
+    }
 }

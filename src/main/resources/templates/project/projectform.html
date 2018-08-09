@@ -22,23 +22,26 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-primary">
-                <form th:action="@{/project/}"  method="post">
+                <form th:object="${project}" th:action="@{/project/}"  method="post">
+                    <input  type="hidden"  th:field="*{id}">
                     <div class="panel-group">
                         <div class="panel-primary">
                             <div class="panel-heading">
-                                <h1 class="panel-title">New Project</h1>
+                                <h1 th:if="${project.id == null}" class="panel-title">New Project</h1>
+                                <h1 th:unless="${project.id == null}" class="panel-title">Update Project</h1>
                             </div>
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-12 form-group">
                                         <label>Project Git Link</label>
-                                        <input type="text" class="form-control" th:field="${project.gitPath}">
+                                        <input th:readonly="${project.id != null}" type="text" class="form-control" th:field="*{gitPath}">
                                         <label>Project Description</label>
-                                        <textarea rows="6" class="form-control" th:field="${project.description}"></textarea>
+                                        <textarea rows="6" class="form-control" th:field="*{description}">Description here</textarea>
                                     </div>
                                     <div class="col-md-12 form-group">
                                         <a class="btn btn-primary" href="/project">Back</a>
-                                        <button type="submit" class="btn btn-primary pull-right">Create Project</button>
+                                        <button th:if="${project.id == null}" type="submit" class="btn btn-primary pull-right">Create Project</button>
+                                        <button th:unless="${project.id == null}" type="submit" class="btn btn-primary pull-right">Update Project</button>
                                     </div>
                                 </div>
                             </div>
