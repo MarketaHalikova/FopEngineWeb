@@ -63,7 +63,14 @@ public class ProjectController {
             log.debug("controller update Project called. Updated Project id = " + savedProject.getId());
             return "redirect:/project/" + savedProject.getId() + "/show";
         }
+    }
 
+    @GetMapping("project/{id}/delete")
+    public String deleteById(@PathVariable String id){
 
+        log.debug("Deleting project with id: " + id);
+
+        projectService.deleteById(Long.valueOf(id));
+        return "redirect:/";
     }
 }

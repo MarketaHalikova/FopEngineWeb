@@ -11,4 +11,5 @@ public interface ProjectService {
     ProjectCommand saveProjectCommand(ProjectCommand projectCommand);
     ProjectCommand findCommandById (Long l);
     Project saveProject(Project project);
+    void deleteById(Long idToDelete);
 }

@@ -27,6 +27,9 @@
     <div>
         <a th:href="@{'/project/' + ${project.id} + '/update'}" type="button" class="btn btn-primary">Edit Header</a>
     </div>
+    <div>
+        <a href="#" th:href="@{'/project/' + ${project.id} + '/delete'}" type="button" class="btn btn-primary">Delete</a>
+    </div>
 </div>
 <!--/*@thymesVar id="project" type="com.marketahalikova.fopengineweb.model.Project"*/-->
 <div class="container">

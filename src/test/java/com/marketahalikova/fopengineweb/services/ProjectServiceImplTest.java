@@ -15,8 +15,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class ProjectServiceImplTest {
@@ -48,7 +47,7 @@ public class ProjectServiceImplTest {
 
         Set<Project> recipes = projectService.getProjects();
 
-        assertEquals(recipes.size(), 1);
+        assertThat(recipes).hasSize(1);
         verify(projectRepository, times(1)).findAll();
         verify(projectRepository, never()).findById(anyLong());
     }
@@ -63,7 +62,7 @@ public class ProjectServiceImplTest {
 
         Project projectReturned = projectService.findById(1L);
 
-        assertNotNull("Null recipe returned", projectReturned);
+        assertThat(projectReturned).isNotNull();
         verify(projectRepository, times(1)).findById(anyLong());
         verify(projectRepository, never()).findAll();
     }
@@ -95,7 +94,7 @@ public class ProjectServiceImplTest {
 
         ProjectCommand commandById = projectService.findCommandById(1L);
 
-        assertNotNull("Null project returned", commandById);
+        assertThat(commandById).isNotNull();
         verify(projectRepository, times(1)).findById(anyLong());
         verify(projectRepository, never()).findAll();
     }
@@ -111,7 +110,7 @@ public class ProjectServiceImplTest {
 
         ProjectCommand projectCommandSaved = projectService.saveProjectCommand(projectCommand);
 
-        assertNotNull("Null project returned", projectCommandSaved);
+        assertThat(projectCommandSaved).isNotNull();
         verify(projectRepository, times(1)).save(any());
         verify(projectRepository, never()).saveAll(any());
         verify(projectCommandToProject, times(1)).convert(any());
@@ -123,8 +122,20 @@ public class ProjectServiceImplTest {
         Project project = new Project();
         when(projectRepository.save(any())).thenReturn(project);
         Project projectSaved = projectService.saveProject(any());
-        assertNotNull("Null project returned", projectSaved);
+        assertThat(projectSaved).isNotNull();
         verify(projectRepository, times(1)).save(any());
         verify(projectRepository, never()).saveAll(any());
+    }
+
+    @Test
+    public void testDeleteById() throws Exception {
+
+        //given
+        Long idToDelete = Long.valueOf(2L);
+        //when
+        projectService.deleteById(idToDelete);
+        //no 'when', since method has void return type
+        //then
+        verify(projectRepository, times(1)).deleteById(anyLong());
     }
 }

@@ -70,4 +70,9 @@ public class ProjectServiceImpl implements ProjectService{
         log.debug("Saved project id: " + savedProject.getId());
         return savedProject;
     }
+
+    @Override
+    public void deleteById(Long idToDelete) {
+        projectRepository.deleteById(idToDelete);
+    }
 }
