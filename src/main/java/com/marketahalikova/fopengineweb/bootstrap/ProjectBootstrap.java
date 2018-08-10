@@ -1,6 +1,7 @@
 package com.marketahalikova.fopengineweb.bootstrap;
 
 import com.marketahalikova.fopengineweb.model.Font;
+import com.marketahalikova.fopengineweb.model.MavenArtifact;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,26 @@ public class ProjectBootstrap implements ApplicationListener<ContextRefreshedEve
         project2.addFont(font3);
         projects.add(project2);
 
+        addMavenArtifacts(project1, project2);
+
         return  projects;
+    }
+
+    private void addMavenArtifacts(Project project1, Project project2) {
+        MavenArtifact mavenArtifactProject1 = new MavenArtifact( "groupProject1", "artifactProject1","versionProject1");
+        project1.setMavenArtifact(mavenArtifactProject1);
+
+        MavenArtifact dependency1_Project1 = new MavenArtifact("dependency1_groupProject1", "dependency1_artifactProject1", "dependency1_versionProject1");
+        //    dependency1_Project1 = mavenArtifactRepository.save(dependency1_Project1);
+        MavenArtifact dependency2_Project1 = new MavenArtifact( "dependency2_groupProject1", "dependency2_artifactProject1","dependency2_versionProject1");
+        project1.getDependencies().add(dependency1_Project1);
+        //   dependency2_Project1 = mavenArtifactRepository.save(dependency2_Project1);
+        project1.getDependencies().add(dependency2_Project1);
+
+        MavenArtifact mavenArtifactProject2 = new MavenArtifact("groupProject2","artifactProject2",  "versionProject2");
+        project2.setMavenArtifact(mavenArtifactProject2);
+        MavenArtifact dependency1_Project2 = new MavenArtifact( "dependency1_groupProject2","dependency1_artifactProject2", "dependency1_versionProject2");
+        //       dependency1_Project2 = mavenArtifactRepository.save(dependency1_Project2);
+        project2.getDependencies().add(dependency1_Project2);
     }
 }

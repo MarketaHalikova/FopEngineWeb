@@ -21,9 +21,14 @@ public class Project {
     private ProjectStatus projectStatus;
     @OneToMany (mappedBy = "project", cascade = CascadeType.ALL)
     private Set<Font> fontSet;
+    @OneToOne(cascade = CascadeType.ALL)
+    private MavenArtifact mavenArtifact;
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<MavenArtifact> dependencies;
 
     public Project() {
         fontSet = new HashSet<>();
+        dependencies = new HashSet<>();
         this.projectStatus = ProjectStatus.OK;
     }
 
