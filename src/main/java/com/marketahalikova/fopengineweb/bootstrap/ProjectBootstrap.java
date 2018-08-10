@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class ProjectBootstrap implements ApplicationListener<ContextRefreshedEve
 
         Font font1 = new Font("Font1");
         project1.addFont(font1);
+        project1.setLastChange(LocalDateTime.parse("1993-05-04T09:09:09.09"));
         projects.add(project1);
 
         Project project2 = new Project("Project2", "git2");
@@ -45,7 +47,10 @@ public class ProjectBootstrap implements ApplicationListener<ContextRefreshedEve
         Font font3 = new Font("Font3");
         project2.addFont(font2);;
         project2.addFont(font3);
+        project2.setLastChange(LocalDateTime.parse("1993-05-04T09:09:09.09"));
         projects.add(project2);
+
+
 
         addMavenArtifacts(project1, project2);
 

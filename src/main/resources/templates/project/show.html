@@ -67,6 +67,10 @@
                                 <div>
                                     <textarea th:text="${project.dependencies}">project dependecies </textarea>
                                 </div>
+                                <label>Last Change:</label>
+                                <div>
+                                    <textarea th:text="${#temporals.format(project.lastChange, 'dd.MM.yyyy HH:mm')}">project last change </textarea>
+                                </div>
                             </div>
                         </div>
                     </div>

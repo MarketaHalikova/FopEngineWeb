@@ -4,6 +4,7 @@ import com.marketahalikova.fopengineweb.enums.ProjectStatus;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ public class Project {
     private String projectName;
     private String gitPath;
     private String description;
+    private LocalDateTime lastChange;
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
     @OneToMany (mappedBy = "project", cascade = CascadeType.ALL)
