@@ -1,9 +1,8 @@
 package com.marketahalikova.fopengineweb.services;
 
-import com.marketahalikova.fopengineweb.commands.ProjectCommand;
-import com.marketahalikova.fopengineweb.converters.ProjectCommandToProject;
-import com.marketahalikova.fopengineweb.converters.ProjectToProjectCommand;
+import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.exceptions.NotFoundException;
+import com.marketahalikova.fopengineweb.mappers.ProjectMapper;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +18,11 @@ import java.util.Set;
 public class ProjectServiceImpl implements ProjectService{
 
     private final ProjectRepository projectRepository;
-    private final ProjectToProjectCommand projectToProjectCommand;
-    private final ProjectCommandToProject projectCommandToProject;
 
-    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectCommandToProject projectCommandToProject, ProjectToProjectCommand projectToProjectCommand) {
+
+    public ProjectServiceImpl(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
-        this.projectCommandToProject = projectCommandToProject;
-        this.projectToProjectCommand = projectToProjectCommand;
+
     }
 
     @Override
@@ -49,18 +46,18 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Transactional
     @Override
-    public ProjectCommand saveProjectCommand(ProjectCommand projectCommand) {
-        Project detachedProject = projectCommandToProject.convert(projectCommand);
+    public ProjectDTO saveProjectCommand(ProjectDTO projectDTO) {
+        Project detachedProject = ProjectMapper.INSTANCE.projectCommandToProject(projectDTO);
 
         Project savedProject = projectRepository.save(detachedProject);
         log.debug("Saved ProjectId:" + savedProject.getId());
-        return projectToProjectCommand.convert(savedProject);
+        return ProjectMapper.INSTANCE.projectToProjectCommand(savedProject);
     }
 
     @Transactional
     @Override
-    public ProjectCommand findCommandById(Long l) {
-        return projectToProjectCommand.convert(findById(l));
+    public ProjectDTO findCommandById(Long l) {
+        return ProjectMapper.INSTANCE.projectToProjectCommand(findById(l));
     }
 
 

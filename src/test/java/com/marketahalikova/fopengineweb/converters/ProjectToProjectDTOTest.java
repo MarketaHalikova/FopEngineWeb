@@ -1,7 +1,8 @@
 package com.marketahalikova.fopengineweb.converters;
 
-import com.marketahalikova.fopengineweb.commands.ProjectCommand;
+import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.enums.ProjectStatus;
+import com.marketahalikova.fopengineweb.mappers.ProjectMapper;
 import com.marketahalikova.fopengineweb.model.Font;
 import com.marketahalikova.fopengineweb.model.Project;
 import org.junit.Before;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ProjectToProjectCommandTest {
+public class ProjectToProjectDTOTest {
 
     public static final String DESCRIPTION = "description";
     public static final Long LONG_VALUE = new Long(1L);
@@ -21,21 +22,21 @@ public class ProjectToProjectCommandTest {
     public static final ProjectStatus STATUS = ProjectStatus.ARCHIVED;
     public static final Set<Font> fontSet = new HashSet<>();
 
-    ProjectToProjectCommand converter;
+    ProjectMapper converter;
 
     @Before
     public void setUp() throws Exception {
-        converter = new ProjectToProjectCommand();
+        converter = ProjectMapper.INSTANCE;
     }
 
     @Test
     public void testNullObjectConvert() throws Exception {
-        assertThat(converter.convert(null)).isNull();
+        assertThat(converter.projectToProjectCommand(null)).isNull();
     }
 
     @Test
     public void testEmptyObj() throws Exception {
-        assertThat(converter.convert(new Project())).isNotNull();
+        assertThat(converter.projectToProjectCommand(new Project())).isNotNull();
     }
 
     @Test
@@ -52,15 +53,15 @@ public class ProjectToProjectCommandTest {
         project.setProjectStatus(STATUS);
         project.setFontSet(fontSet);
         //when
-        ProjectCommand projectCommand = converter.convert(project);
+        ProjectDTO projectDTO = converter.projectToProjectCommand(project);
 
         //then
-        assertThat(projectCommand.getDescription()).isEqualTo(DESCRIPTION);
-        assertThat(projectCommand.getId()).isEqualTo(LONG_VALUE);
-        assertThat(projectCommand.getProjectName()).isEqualTo(PROJECT_NAME);
-        assertThat(projectCommand.getGitPath()).isEqualTo(GIT_PATH);
-        assertThat(projectCommand.getProjectStatus()).isEqualTo(STATUS);
-        assertThat(projectCommand.getFontSet().size()).isEqualTo(1);
-        assertThat(projectCommand.getFontSet().contains(font1)).isTrue();
+        assertThat(projectDTO.getDescription()).isEqualTo(DESCRIPTION);
+        assertThat(projectDTO.getId()).isEqualTo(LONG_VALUE);
+        assertThat(projectDTO.getProjectName()).isEqualTo(PROJECT_NAME);
+        assertThat(projectDTO.getGitPath()).isEqualTo(GIT_PATH);
+        assertThat(projectDTO.getProjectStatus()).isEqualTo(STATUS);
+        assertThat(projectDTO.getFontSet().size()).isEqualTo(1);
+        assertThat(projectDTO.getFontSet().contains(font1)).isTrue();
     }
 }

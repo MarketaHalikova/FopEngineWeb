@@ -1,6 +1,6 @@
 package com.marketahalikova.fopengineweb.controllers;
 
-import com.marketahalikova.fopengineweb.commands.ProjectCommand;
+import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.services.ProjectService;
 import org.junit.Before;
@@ -135,12 +135,12 @@ public class ProjectControllerTest {
     @Test
     public void saveOrUpdateProjectTest() throws Exception {
         // given
-        ProjectCommand projectCommand = new ProjectCommand();
-        projectCommand.setId(ID);
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setId(ID);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        when(projectService.saveProjectCommand(any())).thenReturn(projectCommand);
+        when(projectService.saveProjectCommand(any())).thenReturn(projectDTO);
 
         // when
         mockMvc.perform(post("/project")
@@ -149,7 +149,7 @@ public class ProjectControllerTest {
                     .param("description", "some string"))
                 //then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/project/" + projectCommand.getId() + "/show"));
+                .andExpect(view().name("redirect:/project/" + projectDTO.getId() + "/show"));
         verify(projectService, times(1)).saveProjectCommand(any());
        }
 

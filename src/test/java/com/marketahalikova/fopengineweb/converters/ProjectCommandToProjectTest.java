@@ -1,7 +1,8 @@
 package com.marketahalikova.fopengineweb.converters;
 
-import com.marketahalikova.fopengineweb.commands.ProjectCommand;
+import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.enums.ProjectStatus;
+import com.marketahalikova.fopengineweb.mappers.ProjectMapper;
 import com.marketahalikova.fopengineweb.model.Font;
 import com.marketahalikova.fopengineweb.model.Project;
 import org.junit.Before;
@@ -21,21 +22,21 @@ public class ProjectCommandToProjectTest {
     public static final ProjectStatus STATUS = ProjectStatus.ARCHIVED;
     public static final Set<Font> fontSet = new HashSet<>();
 
-    ProjectCommandToProject converter;
+    ProjectMapper converter;
 
     @Before
     public void setUp() throws Exception {
-        converter = new ProjectCommandToProject();
+        converter = ProjectMapper.INSTANCE;
     }
 
     @Test
     public void testNullObjectConvert() throws Exception {
-        assertThat(converter.convert(null)).isNull();
+        assertThat(converter.projectCommandToProject(null)).isNull();
     }
 
     @Test
     public void testEmptyObj() throws Exception {
-        assertThat(converter.convert(new ProjectCommand())).isNotNull();
+        assertThat(converter.projectCommandToProject(new ProjectDTO())).isNotNull();
     }
 
     @Test
@@ -44,15 +45,15 @@ public class ProjectCommandToProjectTest {
         fontSet.add(font1);
 
         //given
-        ProjectCommand projectCommand = new ProjectCommand();
-        projectCommand.setId(LONG_VALUE);
-        projectCommand.setDescription(DESCRIPTION);
-        projectCommand.setProjectName(PROJECT_NAME);
-        projectCommand.setGitPath(GIT_PATH);
-        projectCommand.setProjectStatus(STATUS);
-        projectCommand.setFontSet(fontSet);
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setId(LONG_VALUE);
+        projectDTO.setDescription(DESCRIPTION);
+        projectDTO.setProjectName(PROJECT_NAME);
+        projectDTO.setGitPath(GIT_PATH);
+        projectDTO.setProjectStatus(STATUS);
+        projectDTO.setFontSet(fontSet);
         //when
-        Project project = converter.convert(projectCommand);
+        Project project = converter.projectCommandToProject(projectDTO);
 
         //then
         assertThat(project.getDescription()).isEqualTo(DESCRIPTION);

@@ -1,8 +1,8 @@
 package com.marketahalikova.fopengineweb.services;
 
-import com.marketahalikova.fopengineweb.commands.ProjectCommand;
-import com.marketahalikova.fopengineweb.converters.ProjectToProjectCommand;
+import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.enums.ProjectStatus;
+import com.marketahalikova.fopengineweb.mappers.ProjectMapper;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import org.junit.Test;
@@ -25,8 +25,7 @@ public class ProjectServiceImplIT {
     private ProjectRepository projectRepository;
     @Autowired
     private ProjectService projectService;
-    @Autowired
-    private ProjectToProjectCommand projectToProjectCommand;
+
 
 
     @Transactional
@@ -35,12 +34,12 @@ public class ProjectServiceImplIT {
         // given
         Iterable<Project> projects = projectRepository.findAll();
         Project project = projects.iterator().next();
-        ProjectCommand projectCommand = projectToProjectCommand.convert(project);
+        ProjectDTO projectDTO = ProjectMapper.INSTANCE.projectToProjectCommand(project);
         //when
-        projectCommand.setProjectStatus(NEW_PROJECT_STATUS);
-        projectCommand.setProjectName(NEW_PROJECT_NAME);
+        projectDTO.setProjectStatus(NEW_PROJECT_STATUS);
+        projectDTO.setProjectName(NEW_PROJECT_NAME);
         //then
-        ProjectCommand savedProject = projectService.saveProjectCommand(projectCommand);
+        ProjectDTO savedProject = projectService.saveProjectCommand(projectDTO);
         assertThat(savedProject.getProjectName()).isEqualTo(NEW_PROJECT_NAME);
         assertThat(savedProject.getProjectStatus()).isEqualTo(NEW_PROJECT_STATUS);
         assertThat(savedProject.getFontSet().size()).isEqualTo(project.getFontSet().size());

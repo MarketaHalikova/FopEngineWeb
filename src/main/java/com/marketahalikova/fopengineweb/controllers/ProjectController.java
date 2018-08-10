@@ -1,6 +1,6 @@
 package com.marketahalikova.fopengineweb.controllers;
 
-import com.marketahalikova.fopengineweb.commands.ProjectCommand;
+import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.services.ProjectService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class ProjectController {
 
     @GetMapping({"/project/new"})
     public String newProject(Model model) {
-        model.addAttribute("project", new ProjectCommand());
+        model.addAttribute("project", new ProjectDTO());
         log.debug("controller new Project called.");
         return "project/projectform";
     }
@@ -50,15 +50,15 @@ public class ProjectController {
     }
 
     @PostMapping("project")
-    public String saveOrUpdateProject(@ModelAttribute ProjectCommand projectCommand) {
-        ProjectCommand savedProjectCommand;
-        if(projectCommand.getId()==null) {
-            savedProjectCommand = projectService.saveProjectCommand(projectCommand);
-            log.debug("controller new Project called. New Project id = " + savedProjectCommand.getId());
-            return "redirect:/project/" + savedProjectCommand.getId() + "/show";
+    public String saveOrUpdateProject(@ModelAttribute ProjectDTO projectDTO) {
+        ProjectDTO savedProjectDTO;
+        if(projectDTO.getId()==null) {
+            savedProjectDTO = projectService.saveProjectCommand(projectDTO);
+            log.debug("controller new Project called. New Project id = " + savedProjectDTO.getId());
+            return "redirect:/project/" + savedProjectDTO.getId() + "/show";
         } else {
-            Project tmp = projectService.findById(projectCommand.getId());
-            tmp.setDescription(projectCommand.getDescription());
+            Project tmp = projectService.findById(projectDTO.getId());
+            tmp.setDescription(projectDTO.getDescription());
             Project savedProject = projectService.saveProject(tmp);
             log.debug("controller update Project called. Updated Project id = " + savedProject.getId());
             return "redirect:/project/" + savedProject.getId() + "/show";

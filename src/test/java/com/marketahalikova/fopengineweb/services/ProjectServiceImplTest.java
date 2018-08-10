@@ -1,8 +1,6 @@
 package com.marketahalikova.fopengineweb.services;
 
-import com.marketahalikova.fopengineweb.commands.ProjectCommand;
-import com.marketahalikova.fopengineweb.converters.ProjectCommandToProject;
-import com.marketahalikova.fopengineweb.converters.ProjectToProjectCommand;
+import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.exceptions.NotFoundException;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
@@ -24,17 +22,12 @@ public class ProjectServiceImplTest {
 
     @Mock
     ProjectRepository projectRepository;
-    @Mock
-    ProjectCommandToProject projectCommandToProject;
-    @Mock
-    ProjectToProjectCommand projectToProjectCommand;
-
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
        // projectRepository = mock(ProjectRepository.class);
-        projectService = new ProjectServiceImpl(projectRepository, projectCommandToProject, projectToProjectCommand);
+        projectService = new ProjectServiceImpl(projectRepository);
     }
 
     @Test
@@ -87,12 +80,10 @@ public class ProjectServiceImplTest {
 
         when(projectRepository.findById(anyLong())).thenReturn(projectOptional);
 
-        ProjectCommand projectCommand = new ProjectCommand();
-        projectCommand.setId(1L);
+        ProjectDTO projectDTO = new ProjectDTO();
+        projectDTO.setId(1L);
 
-        when(projectToProjectCommand.convert(any())).thenReturn(projectCommand);
-
-        ProjectCommand commandById = projectService.findCommandById(1L);
+        ProjectDTO commandById = projectService.findCommandById(1L);
 
         assertThat(commandById).isNotNull();
         verify(projectRepository, times(1)).findById(anyLong());
@@ -103,18 +94,16 @@ public class ProjectServiceImplTest {
     public void saveProjectCommandTest() throws Exception {
 
         Project project = new Project();
-        ProjectCommand projectCommand = new ProjectCommand();
-        when(projectCommandToProject.convert(any())).thenReturn(project);
-        when(projectToProjectCommand.convert(any())).thenReturn(projectCommand);
+        ProjectDTO projectDTO = new ProjectDTO();
+
         when(projectRepository.save(any())).thenReturn(project);
 
-        ProjectCommand projectCommandSaved = projectService.saveProjectCommand(projectCommand);
+        ProjectDTO projectDTOSaved = projectService.saveProjectCommand(projectDTO);
 
-        assertThat(projectCommandSaved).isNotNull();
+        assertThat(projectDTOSaved).isNotNull();
         verify(projectRepository, times(1)).save(any());
         verify(projectRepository, never()).saveAll(any());
-        verify(projectCommandToProject, times(1)).convert(any());
-        verify(projectToProjectCommand, times(1)).convert(any());
+
     }
 
     @Test

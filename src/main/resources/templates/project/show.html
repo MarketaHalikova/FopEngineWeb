@@ -48,8 +48,9 @@
 
                             <div class="panel-body">
                                 <label>Git link: </label>
-                                <div><a style="color: white" th:href="${project.gitPath}" th:text="${project.gitPath}">git
-                                    link</a></div>
+                                <div>
+                                    <textarea th:text="${project.gitPath}">project git link</textarea>
+                                </div>
                                 <label>Description:</label>
                                 <div>
                                     <textarea th:text="${project.description}">project description </textarea>
