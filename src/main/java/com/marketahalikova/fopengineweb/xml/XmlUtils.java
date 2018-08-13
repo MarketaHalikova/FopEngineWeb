@@ -2,6 +2,7 @@ package com.marketahalikova.fopengineweb.xml;
 
 import com.marketahalikova.fopengineweb.exceptions.XmlException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -178,5 +179,17 @@ public class XmlUtils {
             }
         }
         return Optional.empty();
+    }
+
+
+    public static void updateOrCreateAttribute(Node node, String attributeName, String newValue){
+        Node attribute = node.getAttributes().getNamedItem(attributeName);
+        if(attribute != null) {
+            if(!attribute.getNodeValue().equals(newValue)) {
+                attribute.setNodeValue(newValue);
+            }
+        } else {
+            ((Element)node).setAttribute(attributeName, newValue);
+        }
     }
 }

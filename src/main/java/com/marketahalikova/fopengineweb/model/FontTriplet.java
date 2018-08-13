@@ -44,5 +44,11 @@ public class FontTriplet {
         this.inddName = inddName;
         this.inddStyle = inddStyle;
     }
-
+    public String getEmbedFile() {
+        return fontFiles.stream()
+                .filter(f -> f.getFileName().endsWith("ttf") || f.getFileName().endsWith("pfb"))
+                .findAny()
+                .map(fontMapper -> fontMapper.getFullTarget())
+                .orElse("");
+    }
 }
