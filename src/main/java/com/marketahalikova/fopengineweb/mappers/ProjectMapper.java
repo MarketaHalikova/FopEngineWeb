@@ -11,6 +11,6 @@ public interface ProjectMapper {
 
     ProjectMapper INSTANCE = Mappers.getMapper(ProjectMapper.class);
 
-    ProjectDTO projectToProjectCommand(Project project);
-    Project projectCommandToProject(ProjectDTO project);
+    ProjectDTO projectToProjectDTO(Project project);
+    Project projectDTOToProject(ProjectDTO project);
 }

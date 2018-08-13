@@ -11,6 +11,11 @@ import static org.junit.Assert.assertThat;
 
 public class ProjectTest {
 
+    public static final long ID = 4L;
+    public static final String PROJECT_NAME = "name";
+    public static final String GIT_PATH = "git path";
+    public static final String DESCRIPTION = "description";
+    public static final ProjectStatus PROJECT_STATUS = ProjectStatus.ARCHIVED;
     Project project;
 
     @Before
@@ -20,37 +25,32 @@ public class ProjectTest {
 
     @Test
     public void getId() {
-        Long id = 4L;
-        project.setId(id);
-        assertThat(project.getId(), is(id));
+        project.setId(ID);
+        assertThat(project.getId(), is(ID));
     }
 
     @Test
     public void getProjectName() {
-        String projectName = "name";
-        project.setProjectName(projectName);
-        assertThat(project.getProjectName(), is(projectName));
+        project.setProjectName(PROJECT_NAME);
+        assertThat(project.getProjectName(), is(PROJECT_NAME));
     }
 
     @Test
     public void getGitPath() {
-        String path = "git path";
-        project.setGitPath(path);
-        assertThat(project.getGitPath(), is(path));
+        project.setGitPath(GIT_PATH);
+        assertThat(project.getGitPath(), is(GIT_PATH));
     }
 
     @Test
     public void getDescription() {
-        String description = "description";
-        project.setDescription(description);
-        assertThat(project.getDescription(), is(description));
+        project.setDescription(DESCRIPTION);
+        assertThat(project.getDescription(), is(DESCRIPTION));
     }
 
     @Test
     public void getProjectStatus() {
-        ProjectStatus projectStatus = ProjectStatus.ARCHIVED;
-        project.setProjectStatus(projectStatus);
-        assertThat(project.getProjectStatus(), is(projectStatus));
+        project.setProjectStatus(PROJECT_STATUS);
+        assertThat(project.getProjectStatus(), is(PROJECT_STATUS));
 
     }
 

@@ -25,4 +25,7 @@ public class ProjectFileMapper {
         this.targetPath = targetPath;
     }
 
+    public String getFullTarget() {
+        return targetPath + "/" + fileName;
+    }
 }

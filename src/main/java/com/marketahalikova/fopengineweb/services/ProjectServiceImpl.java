@@ -47,17 +47,17 @@ public class ProjectServiceImpl implements ProjectService{
     @Transactional
     @Override
     public ProjectDTO saveProjectCommand(ProjectDTO projectDTO) {
-        Project detachedProject = ProjectMapper.INSTANCE.projectCommandToProject(projectDTO);
+        Project detachedProject = ProjectMapper.INSTANCE.projectDTOToProject(projectDTO);
 
         Project savedProject = projectRepository.save(detachedProject);
         log.debug("Saved ProjectId:" + savedProject.getId());
-        return ProjectMapper.INSTANCE.projectToProjectCommand(savedProject);
+        return ProjectMapper.INSTANCE.projectToProjectDTO(savedProject);
     }
 
     @Transactional
     @Override
     public ProjectDTO findCommandById(Long l) {
-        return ProjectMapper.INSTANCE.projectToProjectCommand(findById(l));
+        return ProjectMapper.INSTANCE.projectToProjectDTO(findById(l));
     }
 
 

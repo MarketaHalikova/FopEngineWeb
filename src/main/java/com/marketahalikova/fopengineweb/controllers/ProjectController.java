@@ -35,6 +35,7 @@ public class ProjectController {
         return "project/show";
     }
 
+
     @GetMapping({"/project/new"})
     public String newProject(Model model) {
         model.addAttribute("project", new ProjectDTO());

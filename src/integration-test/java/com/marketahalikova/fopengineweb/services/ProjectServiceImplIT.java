@@ -34,7 +34,7 @@ public class ProjectServiceImplIT {
         // given
         Iterable<Project> projects = projectRepository.findAll();
         Project project = projects.iterator().next();
-        ProjectDTO projectDTO = ProjectMapper.INSTANCE.projectToProjectCommand(project);
+        ProjectDTO projectDTO = ProjectMapper.INSTANCE.projectToProjectDTO(project);
         //when
         projectDTO.setProjectStatus(NEW_PROJECT_STATUS);
         projectDTO.setProjectName(NEW_PROJECT_NAME);
