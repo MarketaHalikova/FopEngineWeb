@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
+@Table
 public class MavenArtifact {
 
     @Id
