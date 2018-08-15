@@ -26,7 +26,7 @@ public class UserconfigHandlerIT {
     public static final Path USERCONFIG_SOURCE = Paths.get("target/test-classes/userconfig.xml");
     public static final Path USERCONFIG_TARGET = Paths.get("target/test-classes/userconfig_test.xml");
     public static final String FONT_NAME = "JCArialBlack";
-    public static final FontStyle FONT_STYLE = FontStyle.BoldItalic;
+    public static final FontStyle FONT_STYLE = FontStyle.bolditalic;
     public static final ProjectFileMapper METRICS_FILE = new ProjectFileMapper("metrics", "sourcePath", "targetPath");
     public static final ProjectFileMapper FONT_FILE_TTF = new ProjectFileMapper("ttf", "sourcePath", "targetPath");
     public static final ProjectFileMapper FONT_FILE_PFM = new ProjectFileMapper("pfm", "sourcePath", "targetPath");

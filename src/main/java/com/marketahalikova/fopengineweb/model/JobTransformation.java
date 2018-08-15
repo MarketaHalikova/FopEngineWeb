@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.model;
 
+import com.marketahalikova.fopengineweb.enums.FileType;
 import lombok.Data;
 import org.hibernate.annotations.Where;
 
@@ -35,4 +36,15 @@ public class JobTransformation extends Job {
         xsls = new HashSet<>();
         this.transformationName = transformationName;
     }
+
+    public void setMainXsl(ProjectFileMapper mainXsl) {
+        mainXsl.setFileType(FileType.xsl);
+        this.mainXsl = mainXsl;
+    }
+
+    public void setXsls(Set<ProjectFileMapper> xsls) {
+        xsls.forEach(projectFileMapper -> projectFileMapper.setFileType(FileType.imported_xsls));
+        this.xsls = xsls;
+    }
+
 }

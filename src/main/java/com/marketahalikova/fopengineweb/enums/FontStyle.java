@@ -1,20 +1,20 @@
 package com.marketahalikova.fopengineweb.enums;
 
 public enum FontStyle {
-    Normal,
-    Bold,
-    Italic,
-    BoldItalic;
+    normal,
+    bold,
+    italic,
+    bolditalic;
 
     public String getStyle() {
 
         String sytle;
         switch (this) {
-            case Normal:
-            case Bold:
+            case normal:
+            case bold:
                 return "normal";
-            case Italic:
-            case BoldItalic:
+            case italic:
+            case bolditalic:
                 return "italic";
         }
         throw new RuntimeException("Case not implemented");
@@ -22,11 +22,11 @@ public enum FontStyle {
 
     public String getWeight() {
         switch(this) {
-            case Normal:
-            case Italic:
+            case normal:
+            case italic:
                 return "normal";
-            case Bold:
-            case BoldItalic:
+            case bold:
+            case bolditalic:
                 return "bold";
         }
         throw new RuntimeException("Case not implemented");

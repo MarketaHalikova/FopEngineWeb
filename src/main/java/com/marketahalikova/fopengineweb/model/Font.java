@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -27,7 +28,7 @@ public class Font {
     public Set<FontTriplet> fontTriplets;
 
     public Font(){
-        fontTriplets = new HashSet<>(4);
+        fontTriplets = new LinkedHashSet<>(4);
     }
 
     public Font(String fontName) {

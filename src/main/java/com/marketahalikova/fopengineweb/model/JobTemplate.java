@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.model;
 
+import com.marketahalikova.fopengineweb.enums.FileType;
 import lombok.Data;
 import org.hibernate.annotations.Where;
 
@@ -34,5 +35,14 @@ public class JobTemplate extends Job {
         super(jobName, processName);
         templates = new HashSet<>();
         this.templateName = templateName;
+    }
+
+    public void setMainTemplate(ProjectFileMapper mainTemplate) {
+        mainTemplate.setFileType(FileType.template);
+        this.mainTemplate = mainTemplate;
+    }
+    public void setTemplates(Set<ProjectFileMapper> templates) {
+        templates.forEach(projectFileMapper -> projectFileMapper.setFileType(FileType.imported_templates));
+        this.templates = templates;
     }
 }

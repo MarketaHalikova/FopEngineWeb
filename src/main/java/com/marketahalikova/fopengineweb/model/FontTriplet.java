@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.model;
 
+import com.marketahalikova.fopengineweb.enums.FileType;
 import com.marketahalikova.fopengineweb.enums.FontStyle;
 import lombok.Data;
 import org.hibernate.annotations.Where;
@@ -16,8 +17,10 @@ public class FontTriplet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Enumerated(value = EnumType.STRING)
     public FontStyle fontStyle;
+
     private String inddName;
     private String inddStyle;
 
@@ -35,6 +38,16 @@ public class FontTriplet {
     private Set<ProjectFileMapper> fontFiles;
 
 
+    public void setFontFiles(Set<ProjectFileMapper> fontFiles) {
+        fontFiles.forEach(projectFileMapper -> projectFileMapper.setFileType(FileType.font_file));
+        this.fontFiles = fontFiles;
+    }
+
+    public void setMetricsFile(ProjectFileMapper metricsFile) {
+        metricsFile.setFileType(FileType.metrics_file);
+        this.metricsFile = metricsFile;
+    }
+
     public FontTriplet(){
         fontFiles = new HashSet<>(2);
     }
@@ -51,4 +64,5 @@ public class FontTriplet {
                 .map(fontMapper -> fontMapper.getFullTarget())
                 .orElse("");
     }
+
 }

@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.model;
 
+import com.marketahalikova.fopengineweb.enums.FileType;
 import com.marketahalikova.fopengineweb.enums.ProjectStatus;
 import lombok.Data;
 import org.hibernate.annotations.Where;
@@ -58,6 +59,12 @@ public class Project {
     public void addFont(Font font) {
         fontSet.add(font);
         font.setProject(this);
+    }
+
+    public void setUserConfig(ProjectFileMapper projectFileMapper){
+        projectFileMapper.setFileType(FileType.userconfig);
+        this.userConfig = projectFileMapper;
+
     }
 
 }

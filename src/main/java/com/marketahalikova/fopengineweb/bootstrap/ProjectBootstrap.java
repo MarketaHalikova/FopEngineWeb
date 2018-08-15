@@ -87,10 +87,10 @@ public class ProjectBootstrap implements ApplicationListener<ContextRefreshedEve
         project2.addFont(font3);
         projects.add(project2);
 
-        FontTriplet triplet1 = new FontTriplet(FontStyle.Bold, "inddFont1", "inddStyle1");
-        FontTriplet triplet2 = new FontTriplet(FontStyle.Bold, "inddFont2", "inddStyle2");
-        FontTriplet triplet3 = new FontTriplet(FontStyle.Bold, "inddFont3", "inddStyle3");
-        FontTriplet triplet4 = new FontTriplet(FontStyle.Bold, "inddFont4", "inddStyle4");
+        FontTriplet triplet1 = new FontTriplet(FontStyle.bold, "inddFont1", "inddStyle1");
+        FontTriplet triplet2 = new FontTriplet(FontStyle.bold, "inddFont2", "inddStyle2");
+        FontTriplet triplet3 = new FontTriplet(FontStyle.bold, "inddFont3", "inddStyle3");
+        FontTriplet triplet4 = new FontTriplet(FontStyle.bold, "inddFont4", "inddStyle4");
         ProjectFileMapper metrics1 = new ProjectFileMapper("metrics1", "source_metrics1", "target_metrics1");
         ProjectFileMapper metrics2 = new ProjectFileMapper("metrics2", "source_metrics2", "target_metrics2");
         ProjectFileMapper metrics3 = new ProjectFileMapper("metrics3", "source_metrics3", "target_metrics3");

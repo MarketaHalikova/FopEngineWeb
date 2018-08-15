@@ -9,6 +9,6 @@ public enum FileType {
     graphics,
     template,
     imported_templates,
-    font_file,
-    metrics_file
+    font_file,//done
+    metrics_file//done
 }

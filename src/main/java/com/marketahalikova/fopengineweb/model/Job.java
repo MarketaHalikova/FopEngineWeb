@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.model;
 
+import com.marketahalikova.fopengineweb.enums.FileType;
 import lombok.Data;
 import org.hibernate.annotations.Where;
 
@@ -21,6 +22,7 @@ public class Job {
     @OneToOne(cascade = CascadeType.ALL)
     @Where(clause="FILE_TYPE = 'schema'")
     private ProjectFileMapper schema;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "file_to_source",
@@ -29,6 +31,7 @@ public class Job {
     )
     @Where(clause = "FILE_TYPE = 'imported_schemas'")
     private Set<ProjectFileMapper> schemas;
+
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -49,4 +52,21 @@ public class Job {
         this.jobName = jobName;
         this.processName = processName;
     }
+
+    public void setSchema(ProjectFileMapper schema) {
+        schema.setFileType(FileType.schema);
+        this.schema = schema;
+    }
+
+    public void setSchemas(Set<ProjectFileMapper> schemas) {
+        schemas.forEach(projectFileMapper -> projectFileMapper.setFileType(FileType.imported_schemas));
+        this.schemas = schemas;
+    }
+
+    public void setGraphics(Set<ProjectFileMapper> graphics) {
+        graphics.forEach(projectFileMapper -> projectFileMapper.setFileType(FileType.graphics));
+        this.graphics = graphics;
+    }
+
+
 }
