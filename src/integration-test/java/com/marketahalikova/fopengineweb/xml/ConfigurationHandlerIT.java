@@ -11,7 +11,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,13 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConfigurationHandlerIT {
     public static final String CONFIGURATION_FILE = "target/test-classes/fopengine/fopengine-configuration.xml";
 
-    static ConfigurationHandler configurationHandler;
+    static ConfigurationHandlerImpl configurationHandlerImpl;
     static Configuration configuration;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        configurationHandler = new ConfigurationHandler();
-        configuration = configurationHandler.readConfiguration(Paths.get(CONFIGURATION_FILE));
+        configurationHandlerImpl = new ConfigurationHandlerImpl();
+        configuration = configurationHandlerImpl.readConfiguration(Paths.get(CONFIGURATION_FILE));
     }
 
     @Test
@@ -35,7 +34,7 @@ public class ConfigurationHandlerIT {
 
     @Test
     public void createProject() throws XmlException {
-        Project project = configurationHandler.createProject(Paths.get("gitPath"), Paths.get(CONFIGURATION_FILE));
+        Project project = configurationHandlerImpl.createProject("gitPath", Paths.get(CONFIGURATION_FILE));
         assertThat(project.getProjectName()).isEqualTo("testProject");
         assertThat(project.getDescription()).isNullOrEmpty();
         assertThat(project.getMavenArtifact().getArtifact()).isEqualTo("test-genera");
@@ -54,7 +53,7 @@ public class ConfigurationHandlerIT {
 
     @Test
     public void readXmlJob() throws XmlException {
-        Job job1 = configurationHandler.readXmlJob(configuration.getJobs().getJob().get(0), configuration);
+        Job job1 = configurationHandlerImpl.readXmlJob(configuration.getJobs().getJob().get(0), configuration);
         assertThat(job1.getJobName()).isEqualTo("genera_idml");
         assertThat(job1.getProcessName()).isEqualTo("GENERATE_IDML");
         assertThat(job1.getSchema().getFileName()).isEqualTo("Genera5DataDynamic.xsd");
@@ -71,7 +70,7 @@ public class ConfigurationHandlerIT {
 
     @Test
     public void getJobTransformation() throws XmlException {
-        Job job2 = configurationHandler.readXmlJob(configuration.getJobs().getJob().get(1), configuration);
+        Job job2 = configurationHandlerImpl.readXmlJob(configuration.getJobs().getJob().get(1), configuration);
         JobTransformation jobTransformation = (JobTransformation) job2;
         assertThat(jobTransformation.getJobName()).isEqualTo("xsl_fo");
         assertThat(jobTransformation.getProcessName()).isEqualTo("GENERATE_XSL_FO");
@@ -90,7 +89,7 @@ public class ConfigurationHandlerIT {
         assertThat(jobTransformation.getXsls()).hasSize(2);
         assertThat(jobTransformation.getXsls().iterator().next().getFileType()).isEqualByComparingTo(FileType.imported_xsls);
 
-        Job job3 = configurationHandler.readXmlJob(configuration.getJobs().getJob().get(2), configuration);
+        Job job3 = configurationHandlerImpl.readXmlJob(configuration.getJobs().getJob().get(2), configuration);
         JobTransformation jobTransformation2 = (JobTransformation) job3;
         assertThat(jobTransformation2.getJobName()).isEqualTo("xsl_fo");
         assertThat(jobTransformation2.getProcessName()).isEqualTo("GENERATE_XSL_FO");
@@ -108,7 +107,7 @@ public class ConfigurationHandlerIT {
 
     @Test
     public void getJobTemplate() throws XmlException {
-        Job job4 = configurationHandler.readXmlJob(configuration.getJobs().getJob().get(3), configuration);
+        Job job4 = configurationHandlerImpl.readXmlJob(configuration.getJobs().getJob().get(3), configuration);
         JobTemplate jobTemplate = (JobTemplate) job4;
         assertThat(jobTemplate.getJobName()).isEqualTo("template");
         assertThat(jobTemplate.getProcessName()).isEqualTo("TEMPLATE_PDF");
@@ -130,19 +129,19 @@ public class ConfigurationHandlerIT {
 
     @Test
     public void readXmlFont() {
-        Font font1 = configurationHandler.readXmlFont(configuration.getFonts().getFont().get(0), configuration);
+        Font font1 = configurationHandlerImpl.readXmlFont(configuration.getFonts().getFont().get(0), configuration);
         assertThat(font1.getFontName()).isEqualTo("arialuni");
         assertThat(font1.getFontTriplets()).hasSize(1);
-        Font font2 = configurationHandler.readXmlFont(configuration.getFonts().getFont().get(1), configuration);
+        Font font2 = configurationHandlerImpl.readXmlFont(configuration.getFonts().getFont().get(1), configuration);
         assertThat(font2.getFontName()).isEqualTo("Arial");
         assertThat(font2.getFontTriplets()).hasSize(3);
-        Font font3 = configurationHandler.readXmlFont(configuration.getFonts().getFont().get(2), configuration);
+        Font font3 = configurationHandlerImpl.readXmlFont(configuration.getFonts().getFont().get(2), configuration);
         assertThat(font3.getFontName()).isEqualTo("ArialBold");
         assertThat(font3.getFontTriplets()).hasSize(3);
-        Font font4 = configurationHandler.readXmlFont(configuration.getFonts().getFont().get(3), configuration);
+        Font font4 = configurationHandlerImpl.readXmlFont(configuration.getFonts().getFont().get(3), configuration);
         assertThat(font4.getFontName()).isEqualTo("JCArialBlack");
         assertThat(font4.getFontTriplets()).hasSize(4);
-        Font font5 = configurationHandler.readXmlFont(configuration.getFonts().getFont().get(4), configuration);
+        Font font5 = configurationHandlerImpl.readXmlFont(configuration.getFonts().getFont().get(4), configuration);
         assertThat(font5.getFontName()).isEqualTo("Helvetica");
         assertThat(font5.getFontTriplets()).hasSize(4);
 
@@ -150,15 +149,19 @@ public class ConfigurationHandlerIT {
 
     @Test
     public void readXmlFontTriplet() {
-
-        Font font1 = configurationHandler.readXmlFont(configuration.getFonts().getFont().get(0), configuration);
+        Font font1 = configurationHandlerImpl.readXmlFont(
+                configuration.getFonts().getFont().stream()
+                        .filter(f-> f.getFontName().equals("arialuni"))
+                        .findAny().get(),configuration);
+       // Font font1 = configurationHandlerImpl.readXmlFont(configuration.getFonts().getFont().get(0), configuration);
         FontTriplet triplet1 = font1.getFontTriplets().iterator().next();
         assertThat(triplet1.getFontStyle()).isEqualByComparingTo(FontStyle.normal);
         assertThat(triplet1.getInddName()).isEqualTo("Arial Unicode MS");
         assertThat(triplet1.getInddStyle()).isEqualTo("Regular");
         assertThat(triplet1.getFontFiles()).hasSize(1);
-        assertThat(triplet1.getFontFiles().iterator().next().getFileName()).isEqualTo("arialuni.ttf");
-        assertThat(triplet1.getFontFiles().iterator().next().getTargetPath()).isEqualTo("fonts");
+        ProjectFileMapper mapper = triplet1.getFontFiles().iterator().next();
+        assertThat(mapper.getFileName()).isEqualTo("arialuni.ttf");
+        assertThat(mapper.getTargetPath()).isEqualTo("fonts");
         assertThat(triplet1.getFontFiles().iterator().next().getSourcePath()).isNullOrEmpty();
         assertThat(triplet1.getFontFiles().iterator().next().getFileType()).isEqualByComparingTo(FileType.font_file);
         assertThat(triplet1.getEmbedFile()).isEqualTo("fonts/arialuni.ttf");
@@ -167,8 +170,9 @@ public class ConfigurationHandlerIT {
         assertThat(triplet1.getMetricsFile().getSourcePath()).isNullOrEmpty();
         assertThat(triplet1.getMetricsFile().getFileType()).isEqualByComparingTo(FileType.metrics_file);
 
-        Font font4 = configurationHandler.readXmlFont(configuration.getFonts().getFont().get(3), configuration);
-        FontTriplet triplet3 = font4.getFontTriplets().stream().collect(Collectors.toList()).get(2);
+        Font font4 = configurationHandlerImpl.readXmlFont(configuration.getFonts().getFont().get(3), configuration);
+        FontTriplet triplet3 = font4.getFontTriplets().stream().filter(triplet -> triplet.getFontStyle() == FontStyle.italic).findAny().get();
+       // FontTriplet triplet3 = font4.getFontTriplets().stream().collect(Collectors.toList()).get(2);
         assertThat(triplet3.getFontStyle()).isEqualByComparingTo(FontStyle.italic);
         assertThat(triplet3.getInddName()).isEqualTo("Arial");
         assertThat(triplet3.getInddStyle()).isEqualTo("Black Italic");
@@ -192,7 +196,7 @@ public class ConfigurationHandlerIT {
         file.setFileName("fileName");
         file.setSourcePath("sourcePath");
         file.setTargetPath("targetPath");
-        ProjectFileMapper projectFileMapper = configurationHandler.createProjectFileMapper(file);
+        ProjectFileMapper projectFileMapper = configurationHandlerImpl.createProjectFileMapper(file);
         assertThat(projectFileMapper.getFileName()).isEqualTo(file.getFileName());
         assertThat(projectFileMapper.getSourcePath()).isEqualTo(file.getSourcePath());
         assertThat(projectFileMapper.getTargetPath()).isEqualTo(file.getTargetPath());

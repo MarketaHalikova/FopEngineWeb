@@ -15,13 +15,13 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ConfigurationHandler {
+public class ConfigurationHandlerImpl {
 
-    public Project createProject(Path gitPath, Path configurationPath) throws XmlException {
+    public Project createProject(String gitPath, Path configurationPath) throws XmlException {
         Configuration configuration = readConfiguration(configurationPath);
 
         // new project with gitPath, projectName, description, MavenArtifact
-        Project project = new Project(gitPath.toString(), configuration.getProjectName());
+        Project project = new Project(gitPath, configuration.getProjectName());
         project.setDescription(configuration.getDescription());
         MavenArtifact mavenArtifact = new MavenArtifact(configuration.getGroup(),configuration.getArtifact(),configuration.getVersion());
         project.setMavenArtifact(mavenArtifact);
@@ -118,11 +118,12 @@ public class ConfigurationHandler {
         Font font = new Font(xmlFont.getFontName());
 
         for(com.marketahalikova.fopengineweb.xml.generated.FontTriplet xmlFontTriplet :xmlFont.getFontTriplet()){
-            font.getFontTriplets().add(readXmlFontTriplet(xmlFontTriplet));
+            font.addTriplet(readXmlFontTriplet(xmlFontTriplet));
         }
 
         return font;
     }
+
 
 
     public static FontTriplet readXmlFontTriplet(com.marketahalikova.fopengineweb.xml.generated.FontTriplet xmlFontTriplet) {
@@ -132,10 +133,11 @@ public class ConfigurationHandler {
         fontTriplet.setInddStyle(xmlFontTriplet.getInddStyle());
         fontTriplet.setMetricsFile(new ProjectFileMapper(xmlFontTriplet.getMetricsFile().getFileName(),
                 xmlFontTriplet.getMetricsFile().getSourcePath(),xmlFontTriplet.getMetricsFile().getTargetPath()));
-        fontTriplet.setFontFiles(xmlFontTriplet.getFile().stream().map(ConfigurationHandler::createProjectFileMapper)
+        fontTriplet.setFontFiles(xmlFontTriplet.getFile().stream().map(ConfigurationHandlerImpl::createProjectFileMapper)
                 .collect(Collectors.toSet()));
         return fontTriplet;
     }
+
 
 
     public Configuration readConfiguration(Path configurationPath) throws XmlException {

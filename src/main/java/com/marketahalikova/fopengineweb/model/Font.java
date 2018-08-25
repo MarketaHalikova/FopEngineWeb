@@ -6,7 +6,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -23,12 +22,12 @@ public class Font {
     @ToString.Exclude
     private Project project;
 
-    @ManyToMany
-    @JoinTable
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "font")
     public Set<FontTriplet> fontTriplets;
 
     public Font(){
-        fontTriplets = new LinkedHashSet<>(4);
+        fontTriplets = new HashSet<>(4);
     }
 
     public Font(String fontName) {
@@ -36,4 +35,12 @@ public class Font {
         this.fontName = fontName;
     }
 
-}
+    public void addTriplet(FontTriplet triplet) {
+        fontTriplets.add(triplet);
+        triplet.setFont(this);
+    }
+
+    public void setFontTriplets(Set<FontTriplet> fontTriplets) {
+        fontTriplets = fontTriplets;
+        fontTriplets.forEach(t -> t.setFont(this));
+    }}
