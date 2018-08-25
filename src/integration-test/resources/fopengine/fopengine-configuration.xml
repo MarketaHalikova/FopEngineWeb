@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration xsi:noNamespaceSchemaLocation="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" artifact="test-genera" project-name="testProject" group="de.irs.fopengine" version="0.01" self-contained="false">
+<Configuration xsi:noNamespaceSchemaLocation="../../../main/resources/GeneratorConfiguration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" artifact="test-genera" project-name="testProject" group="de.irs.fopengine" version="0.01" self-contained="false">
 	<Userconfig>
 		<File file-name="userconfig.xml" target-path="conf"/>
 	</Userconfig>
@@ -96,7 +96,7 @@
 		<!--  __________________________________________________________ -->
 		<!--                                           HelveticaLight			   						     -->
 		<!--  __________________________________________________________ -->
-		<Font font-name="JCArialBlack">
+		<Font font-name="Helvetica">
 			<Font-triplet indd-name="Courier New" indd-style="Regular" font-style="normal">
 				<Metrics-file file-name="LTe50263_IRS.xml" target-path="fonts"/>
 				<File file-name="LTe50263_IRS.pfb" target-path="fonts"/>

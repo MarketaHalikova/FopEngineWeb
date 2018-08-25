@@ -2,10 +2,12 @@ package com.marketahalikova.fopengineweb.model;
 
 import com.marketahalikova.fopengineweb.enums.FileType;
 import com.marketahalikova.fopengineweb.enums.ProjectStatus;
+import com.marketahalikova.fopengineweb.utils.PathConverter;
 import lombok.Data;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +23,9 @@ public class Project {
     private String projectName = "";
     private String description;
     private LocalDateTime lastChange;
+
+    @Convert(converter = PathConverter.class)
+    private Path projectDirectory;
 
     @Enumerated(value = EnumType.STRING)
     private ProjectStatus projectStatus;

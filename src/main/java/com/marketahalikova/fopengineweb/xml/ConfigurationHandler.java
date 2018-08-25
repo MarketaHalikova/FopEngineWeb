@@ -3,12 +3,10 @@ package com.marketahalikova.fopengineweb.xml;
 import com.marketahalikova.fopengineweb.enums.FontStyle;
 import com.marketahalikova.fopengineweb.exceptions.XmlException;
 import com.marketahalikova.fopengineweb.model.*;
-import com.marketahalikova.fopengineweb.model.Font;
-import com.marketahalikova.fopengineweb.model.FontTriplet;
-import com.marketahalikova.fopengineweb.model.Job;
-import com.marketahalikova.fopengineweb.xml.generated.*;
-
-import com.sun.jmx.remote.internal.Unmarshal;
+import com.marketahalikova.fopengineweb.xml.generated.Configuration;
+import com.marketahalikova.fopengineweb.xml.generated.File;
+import com.marketahalikova.fopengineweb.xml.generated.Template;
+import com.marketahalikova.fopengineweb.xml.generated.Transformation;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -18,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ConfigurationHandler {
+
     public Project createProject(Path gitPath, Path configurationPath) throws XmlException {
         Configuration configuration = readConfiguration(configurationPath);
 

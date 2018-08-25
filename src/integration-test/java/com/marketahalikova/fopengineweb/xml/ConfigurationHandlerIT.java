@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class ConfigurationHandlerIT {
-    public static final String CONFIGURATION_FILE = "target/test-classes/test-configuration.xml";
+    public static final String CONFIGURATION_FILE = "target/test-classes/fopengine/fopengine-configuration.xml";
 
     static ConfigurationHandler configurationHandler;
     static Configuration configuration;
@@ -143,7 +143,7 @@ public class ConfigurationHandlerIT {
         assertThat(font4.getFontName()).isEqualTo("JCArialBlack");
         assertThat(font4.getFontTriplets()).hasSize(4);
         Font font5 = configurationHandler.readXmlFont(configuration.getFonts().getFont().get(4), configuration);
-        assertThat(font5.getFontName()).isEqualTo("JCArialBlack");
+        assertThat(font5.getFontName()).isEqualTo("Helvetica");
         assertThat(font5.getFontTriplets()).hasSize(4);
 
     }
