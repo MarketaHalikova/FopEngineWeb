@@ -1,0 +1,64 @@
+<!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by Robert Wachter (IRS GmbH) -->
+<!--<!DOCTYPE configuration SYSTEM "config.dtd">-->
+<!-- 
+     this file contains templates which allow an user easy 
+     configuration of Fop. Actually normally you don't need this configuration 
+     file, but if you need to change configuration, you should
+     always use this file and *not* config.xml. 
+     Usage: java org.apache.fop.apps.Fop -c userconfig.xml -fo fo-file -pdf pdf-file
+-->
+<configuration>
+    <fonts>
+		<!--  __________________________________________________________ -->
+		<!--                                           ArialUnicode      -->
+		<!--  __________________________________________________________ -->
+        <font metrics-file="fonts/arialuni.xml" kerning="no" embed-file="fonts/arialuni.ttf">
+            <font-triplet name="arialuni" style="normal" weight="normal" inddName="Arial Unicode MS" inddStyle="Regular"/>
+        </font>
+        <!--  __________________________________________________________ -->
+        <!--                                           JCArial           -->
+        <!--  __________________________________________________________ -->
+        <font metrics-file="fonts/JCarial.xml" kerning="no" embed-file="fonts/JCarial.pfb">
+            <font-triplet name="JCArial" style="normal" weight="normal" inddName="Arial" inddStyle="Regular"/>
+        </font>
+        <font metrics-file="fonts/JCarialb.xml" kerning="no" embed-file="fonts/JCarialb.pfb">
+            <font-triplet name="JCArial" style="normal" weight="bold" inddName="Arial" inddStyle="Bold"/>
+        </font>
+        <font metrics-file="fonts/JCariali.xml" kerning="no" embed-file="fonts/JCariali.pfb">
+            <font-triplet name="JCArial" style="italic" weight="normal" inddName="Arial" inddStyle="Italic"/>
+        </font>
+        <font metrics-file="fonts/JCarialbi.xml" kerning="no" embed-file="fonts/JCarialbi.pfb">
+            <font-triplet name="JCArial" style="italic" weight="bold" inddName="Arial" inddStyle="Bold Italic"/>
+        </font>
+        <!--  __________________________________________________________ -->
+        <!--                                           JCArialBold       -->
+        <!--  __________________________________________________________ -->
+        <font metrics-file="fonts/JCarialb.xml" kerning="no" embed-file="fonts/JCarialb.pfb">
+            <font-triplet name="JCArialBold" style="normal" weight="normal" inddName="Arial" inddStyle="Bold"/>
+        </font>
+        <font metrics-file="fonts/JCariblk.xml" kerning="no" embed-file="fonts/JCariblk.pfb">
+            <font-triplet name="JCArialBold" style="normal" weight="bold" inddName="Arial" inddStyle="Black"/>
+        </font>
+        <font metrics-file="fonts/JCarialbi.xml" kerning="no" embed-file="fonts/JCarialbi.pfb">
+            <font-triplet name="JCArialBold" style="italic" weight="normal" inddName="Arial" inddStyle="Bold Italic"/>
+        </font>
+        <font metrics-file="fonts/JCariblkk.xml" kerning="no" embed-file="fonts/JCariblkk.pfb">
+            <font-triplet name="JCArialBold" style="italic" weight="bold" inddName="Arial" inddStyle="Black Italic"/>
+        </font>
+        <!--  __________________________________________________________ -->
+        <!--                                           JCArialBlack      -->
+        <!--  __________________________________________________________ -->
+        <font metrics-file="fonts/JCariblk.xml" kerning="no" embed-file="fonts/JCariblk.pfb">
+            <font-triplet name="JCArialBlack" style="normal" weight="normal" inddName="Arial" inddStyle="Black"/>
+        </font>
+        <font metrics-file="fonts/JCariblk.xml" kerning="no" embed-file="fonts/JCariblk.pfb">
+            <font-triplet name="JCArialBlack" style="normal" weight="bold" inddName="Arial" inddStyle="Black"/>
+        </font>
+        <font metrics-file="fonts/JCariblkk.xml" kerning="no" embed-file="fonts/JCariblkk.pfb">
+            <font-triplet name="JCArialBlack" style="italic" weight="normal" inddName="Arial" inddStyle="Black Italic"/>
+        </font>
+        <font metrics-file="fonts/JCariblkk.xml" kerning="no" embed-file="fonts/JCariblkk.pfb">
+            <font-triplet name="JCArialBlack" style="italic" weight="bold" inddName="Arial" inddStyle="Black Italic"/>
+        </font>
+	</fonts>
+</configuration>

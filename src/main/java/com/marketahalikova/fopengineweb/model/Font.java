@@ -41,6 +41,6 @@ public class Font {
     }
 
     public void setFontTriplets(Set<FontTriplet> fontTriplets) {
-        fontTriplets = fontTriplets;
+        this.fontTriplets = fontTriplets;
         fontTriplets.forEach(t -> t.setFont(this));
     }}

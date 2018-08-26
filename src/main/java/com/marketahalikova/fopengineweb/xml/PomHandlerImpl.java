@@ -21,7 +21,7 @@ import java.util.Set;
  * read dependencies
  */
 @Getter
-public class PomHandler {
+public class PomHandlerImpl {
 
     private static final String GROUP_EXPRESSION = "/project/groupId";
     private static final String ARTIFACT_EXPRESSION = "/project/artifactId";
@@ -32,7 +32,7 @@ public class PomHandler {
     private Document xmlDocument;
     private static final XPath xPath = XPathFactory.newInstance().newXPath();
 
-    public PomHandler(Path pomPath) throws XmlException {
+    public PomHandlerImpl(Path pomPath) throws XmlException {
         this.pomPath = pomPath;
         xmlDocument = XmlUtils.readXmlDocument(pomPath);
     }

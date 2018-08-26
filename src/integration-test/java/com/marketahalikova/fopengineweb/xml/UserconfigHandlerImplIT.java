@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class UserconfigHandlerIT {
+public class UserconfigHandlerImplIT {
 
     public static final String XPATH_TEMPLATE = "//font-triplet[@name='%s' and @style='%s' and @weight='%s']";
     public static final Path USERCONFIG_SOURCE = Paths.get("target/test-classes/userconfig.xml");
@@ -38,7 +38,7 @@ public class UserconfigHandlerIT {
     public static final String WEIGHT = FONT_STYLE.getWeight();
 
     private static XPath xPath;
-    UserconfigHandler userConfigHandler;
+    UserconfigHandlerImpl userConfigHandler;
 
 
     @BeforeClass
@@ -49,7 +49,7 @@ public class UserconfigHandlerIT {
     @Before
     public void setUp() throws Exception {
         FileCopyUtils.copy(USERCONFIG_SOURCE.toFile(), USERCONFIG_TARGET.toFile());
-        userConfigHandler = new UserconfigHandler(USERCONFIG_TARGET);
+        userConfigHandler = new UserconfigHandlerImpl(USERCONFIG_TARGET);
     }
 
     @Test

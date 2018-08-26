@@ -87,33 +87,28 @@ public class ProjectBootstrap implements ApplicationListener<ContextRefreshedEve
         project2.addFont(font3);
         projects.add(project2);
 
-        FontTriplet triplet1 = new FontTriplet(FontStyle.bold, "inddFont1", "inddStyle1");
+        FontTriplet triplet1 = new FontTriplet(FontStyle.normal, "inddFont1", "inddStyle1");
         FontTriplet triplet2 = new FontTriplet(FontStyle.bold, "inddFont2", "inddStyle2");
-        FontTriplet triplet3 = new FontTriplet(FontStyle.bold, "inddFont3", "inddStyle3");
-        FontTriplet triplet4 = new FontTriplet(FontStyle.bold, "inddFont4", "inddStyle4");
+        FontTriplet triplet3 = new FontTriplet(FontStyle.bolditalic, "inddFont3", "inddStyle3");
+        FontTriplet triplet4 = new FontTriplet(FontStyle.normal, "inddFont4", "inddStyle4");
+        FontTriplet triplet5 = new FontTriplet(FontStyle.bold, "inddFont5", "inddStyle5");
         ProjectFileMapper metrics1 = new ProjectFileMapper("metrics1", "source_metrics1", "target_metrics1");
         ProjectFileMapper metrics2 = new ProjectFileMapper("metrics2", "source_metrics2", "target_metrics2");
         ProjectFileMapper metrics3 = new ProjectFileMapper("metrics3", "source_metrics3", "target_metrics3");
         ProjectFileMapper metrics4 = new ProjectFileMapper("metrics4", "source_metrics4", "target_metrics4");
-        metrics1.setFileType(FileType.metrics_file);
-        metrics2.setFileType(FileType.metrics_file);
-        metrics3.setFileType(FileType.metrics_file);
-        metrics4.setFileType(FileType.metrics_file);
+        ProjectFileMapper metrics5 = new ProjectFileMapper("metrics5", "source_metrics5", "target_metrics5");
         triplet1.setMetricsFile(metrics1);
         triplet2.setMetricsFile(metrics2);
         triplet3.setMetricsFile(metrics3);
         triplet4.setMetricsFile(metrics4);
-        fontTripletRepository.save(triplet1);
-        fontTripletRepository.save(triplet2);
-        fontTripletRepository.save(triplet3);
-        fontTripletRepository.save(triplet4);
+        triplet5.setMetricsFile(metrics5);
 
-        font1.fontTriplets.add(triplet1);
-        font1.fontTriplets.add(triplet2);
-        font1.fontTriplets.add(triplet3);
+        font1.addTriplet(triplet1);
+        font1.addTriplet(triplet2);
+        font1.addTriplet(triplet3);
 
-        font2.fontTriplets.add(triplet4);
-        font2.fontTriplets.add(triplet1);
+        font2.addTriplet(triplet4);
+        font2.addTriplet(triplet5);
 
     }
 

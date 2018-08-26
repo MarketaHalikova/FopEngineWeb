@@ -12,7 +12,7 @@ import javax.xml.xpath.XPathFactory;
 import java.nio.file.Path;
 
 
-public class UserconfigHandler {
+public class UserconfigHandlerImpl {
 
     public static final String FONT_TRIPLET_XPATH_TEMPLATE = "//font-triplet[@name='%s' and @style='%s' and @weight='%s']";
 
@@ -25,7 +25,7 @@ public class UserconfigHandler {
     private Document userConfigDocument;
     private final XPath xPath = XPathFactory.newInstance().newXPath();
 
-    public UserconfigHandler(Path userconfig) throws XmlException {
+    public UserconfigHandlerImpl(Path userconfig) throws XmlException {
         this.userconfig = userconfig;
         userConfigDocument = XmlUtils.readXmlDocument(userconfig);
     }

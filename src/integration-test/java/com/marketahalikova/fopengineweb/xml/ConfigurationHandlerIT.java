@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConfigurationHandlerIT {
     public static final String CONFIGURATION_FILE = "target/test-classes/fopengine/fopengine-configuration.xml";
+    public static final String PROJECT_DIRECTORY = "target/test-classes";
 
     static ConfigurationHandlerImpl configurationHandlerImpl;
     static Configuration configuration;
@@ -34,7 +35,7 @@ public class ConfigurationHandlerIT {
 
     @Test
     public void createProject() throws XmlException {
-        Project project = configurationHandlerImpl.createProject("gitPath", Paths.get(CONFIGURATION_FILE));
+        Project project = configurationHandlerImpl.createProject("gitPath", Paths.get(PROJECT_DIRECTORY));
         assertThat(project.getProjectName()).isEqualTo("testProject");
         assertThat(project.getDescription()).isNullOrEmpty();
         assertThat(project.getMavenArtifact().getArtifact()).isEqualTo("test-genera");

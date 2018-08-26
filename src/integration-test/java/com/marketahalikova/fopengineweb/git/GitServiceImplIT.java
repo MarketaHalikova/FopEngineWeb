@@ -1,5 +1,6 @@
 package com.marketahalikova.fopengineweb.git;
 
+import com.marketahalikova.fopengineweb.exceptions.GitException;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.model.User;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -61,30 +62,30 @@ public class GitServiceImplIT {
         user = new User("testUser", "");
     }
 
-    @Test
-    public void cloneRepository_shouldCloneRemoteRepository() throws Exception {
-        project.setProjectDirectory(Paths.get(PROJECT_DIRECTORY, PROJECT_NAME + "_1"));
-        assertThat(project.getProjectDirectory()).doesNotExist();
-        gitService.cloneRepository(project.getGitPath(), project.getProjectDirectory());
-        assertThat(project.getProjectDirectory()).exists();
-        assertThat(Paths.get(project.getProjectDirectory().toString(), POM_XML)).exists();
-        assertThat(Paths.get(project.getProjectDirectory().toString(), GITIGNORE)).exists();
-        assertThat(Paths.get(project.getProjectDirectory().toString(), SRC_DIRDECTORY)).exists();
-        assertThat(Paths.get(project.getProjectDirectory().toString(), GIT_DIRECTORY)).exists();
-    }
-//
 //    @Test
-//    public void matchProject_remoteProjectNotChanged() throws GitException {
-//        project.setProjectDirectory(Paths.get(PROJECT_DIRECTORY, PROJECT_NAME + "_2"));
+//    public void cloneRepository_shouldCloneRemoteRepository() throws Exception {
+//        project.setProjectDirectory(Paths.get(PROJECT_DIRECTORY, PROJECT_NAME + "_1"));
 //        assertThat(project.getProjectDirectory()).doesNotExist();
 //        gitService.cloneRepository(project.getGitPath(), project.getProjectDirectory());
 //        assertThat(project.getProjectDirectory()).exists();
-//
-//        boolean result = gitService.matchRemote(project.getProjectDirectory());
-//
-//        assertThat(result).isFalse();
+//        assertThat(Paths.get(project.getProjectDirectory().toString(), POM_XML)).exists();
+//        assertThat(Paths.get(project.getProjectDirectory().toString(), GITIGNORE)).exists();
+//        assertThat(Paths.get(project.getProjectDirectory().toString(), SRC_DIRDECTORY)).exists();
+//        assertThat(Paths.get(project.getProjectDirectory().toString(), GIT_DIRECTORY)).exists();
 //    }
-//
+
+    @Test
+    public void matchProject_remoteProjectNotChanged() throws GitException {
+        project.setProjectDirectory(Paths.get(PROJECT_DIRECTORY, PROJECT_NAME + "_2"));
+        assertThat(project.getProjectDirectory()).doesNotExist();
+        gitService.cloneRepository(project.getGitPath(), project.getProjectDirectory());
+        assertThat(project.getProjectDirectory()).exists();
+
+        boolean result = gitService.matchRemote(project.getProjectDirectory());
+
+        assertThat(result).isFalse();
+    }
+
 //    @Test
 //    public void matchProject_remoteProjectChanged() throws GitException, IOException, GitAPIException {
 //        project.setProjectDirectory(Paths.get(PROJECT_DIRECTORY, PROJECT_NAME + "_3"));

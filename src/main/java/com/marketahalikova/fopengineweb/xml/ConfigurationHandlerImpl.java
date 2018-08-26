@@ -12,30 +12,34 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ConfigurationHandlerImpl {
 
-    public Project createProject(String gitPath, Path configurationPath) throws XmlException {
-        Configuration configuration = readConfiguration(configurationPath);
+    public static final String CONFIGURATION_FILE = "fopengine/fopengine-configuration.xml";
+
+
+    public Project createProject(String gitPath, Path projectDirectory) throws XmlException {
+        Configuration configuration = readConfiguration(Paths.get(projectDirectory.toString(), CONFIGURATION_FILE));
 
         // new project with gitPath, projectName, description, MavenArtifact
         Project project = new Project(gitPath, configuration.getProjectName());
         project.setDescription(configuration.getDescription());
-        MavenArtifact mavenArtifact = new MavenArtifact(configuration.getGroup(),configuration.getArtifact(),configuration.getVersion());
+        MavenArtifact mavenArtifact = new MavenArtifact(configuration.getGroup(), configuration.getArtifact(), configuration.getVersion());
         project.setMavenArtifact(mavenArtifact);
-        project.setUserConfig(new ProjectFileMapper(configuration.getUserconfig().getFile().getFileName(),configuration.getUserconfig().getFile().getSourcePath(),configuration.getUserconfig().getFile().getTargetPath() ));
+        project.setUserConfig(new ProjectFileMapper(configuration.getUserconfig().getFile().getFileName(), configuration.getUserconfig().getFile().getSourcePath(), configuration.getUserconfig().getFile().getTargetPath()));
 
         // jobs
-        for(com.marketahalikova.fopengineweb.xml.generated.Job xmlJob : configuration.getJobs().getJob()){
+        for (com.marketahalikova.fopengineweb.xml.generated.Job xmlJob : configuration.getJobs().getJob()) {
             Job job = readXmlJob(xmlJob, configuration);
             project.getJobs().add(job);
         }
 
         // fonts
         if (Optional.ofNullable(configuration.getFonts()).isPresent()) {
-            for(com.marketahalikova.fopengineweb.xml.generated.Font xmlFont :configuration.getFonts().getFont()) {
+            for (com.marketahalikova.fopengineweb.xml.generated.Font xmlFont : configuration.getFonts().getFont()) {
                 Font font = readXmlFont(xmlFont, configuration);
                 project.getFontSet().add(font);
             }
@@ -47,19 +51,19 @@ public class ConfigurationHandlerImpl {
 
     public static Job readXmlJob(com.marketahalikova.fopengineweb.xml.generated.Job xmlJob,
                                  Configuration configuration) throws XmlException {
-       Job job;
+        Job job;
 
-        if(xmlJob.getTemplateName()!=null){
+        if (xmlJob.getTemplateName() != null) {
             job = getJobTemplate(configuration, xmlJob);
-        } else if(xmlJob.getTransformationName()!=null) {
+        } else if (xmlJob.getTransformationName() != null) {
             job = getJobTransformation(configuration, xmlJob);
         } else {
-            job = new Job(xmlJob.getJobName(),xmlJob.getProcessName());
+            job = new Job(xmlJob.getJobName(), xmlJob.getProcessName());
         }
 
-        if(Optional.ofNullable(xmlJob.getMainSchema()).isPresent()){
+        if (Optional.ofNullable(xmlJob.getMainSchema()).isPresent()) {
             job.setSchema(createProjectFileMapper(xmlJob.getMainSchema().getFile()));
-            if(Optional.ofNullable(xmlJob.getMainSchema().getSchemas()).isPresent()){
+            if (Optional.ofNullable(xmlJob.getMainSchema().getSchemas()).isPresent()) {
                 job.setSchemas(xmlJob.getMainSchema().getSchemas().getFile().stream().map(file -> createProjectFileMapper(file)).collect(Collectors.toSet()));
             }
         }
@@ -69,22 +73,22 @@ public class ConfigurationHandlerImpl {
 
     private static Job getJobTransformation(Configuration configuration, com.marketahalikova.fopengineweb.xml.generated.Job xmlJob) throws XmlException {
         Job job;
-        job = new JobTransformation(xmlJob.getJobName(),xmlJob.getProcessName(),xmlJob.getTransformationName());
+        job = new JobTransformation(xmlJob.getJobName(), xmlJob.getProcessName(), xmlJob.getTransformationName());
         Transformation xmlTransformation = configuration.getTransformations().getTransformation().stream()
                 .filter(transformation -> transformation.getName().equals(xmlJob.getTransformationName()))
                 .findAny().orElseThrow(() -> new XmlException(String.format("transformation name %s not found", xmlJob.getTemplateName())));
 
-        if(Optional.ofNullable(xmlTransformation.getMainXsl()).isPresent()) {
+        if (Optional.ofNullable(xmlTransformation.getMainXsl()).isPresent()) {
             ((JobTransformation) job).setMainXsl(new ProjectFileMapper(xmlTransformation.getMainXsl().getFile().getFileName(),
-                    xmlTransformation.getMainXsl().getFile().getSourcePath(),xmlTransformation.getMainXsl().getFile().getTargetPath()));
-            if(Optional.ofNullable(xmlTransformation.getMainXsl().getXsls()).isPresent()) {
+                    xmlTransformation.getMainXsl().getFile().getSourcePath(), xmlTransformation.getMainXsl().getFile().getTargetPath()));
+            if (Optional.ofNullable(xmlTransformation.getMainXsl().getXsls()).isPresent()) {
                 ((JobTransformation) job).setXsls(xmlTransformation.getMainXsl().getXsls().getFile().stream()
                         .map(file -> createProjectFileMapper(file))
                         .collect(Collectors.toSet()));
             }
 
         }
-        if(Optional.ofNullable(xmlTransformation.getGraphics()).isPresent()) {
+        if (Optional.ofNullable(xmlTransformation.getGraphics()).isPresent()) {
             job.setGraphics(xmlTransformation.getGraphics().getFile().stream()
                     .map(file -> createProjectFileMapper(file))
                     .collect(Collectors.toSet()));
@@ -94,12 +98,12 @@ public class ConfigurationHandlerImpl {
 
     private static Job getJobTemplate(Configuration configuration, com.marketahalikova.fopengineweb.xml.generated.Job xmlJob) throws XmlException {
         Job job;
-        job = new JobTemplate(xmlJob.getJobName(),xmlJob.getProcessName(),xmlJob.getTemplateName());
+        job = new JobTemplate(xmlJob.getJobName(), xmlJob.getProcessName(), xmlJob.getTemplateName());
         Template xmlTemplate = configuration.getTemplates().getTemplate().stream()
                 .filter(template -> template.getTemplateName().equals(xmlJob.getTemplateName()))
                 .findAny().orElseThrow(() -> new XmlException(String.format("template name %s not found", xmlJob.getTemplateName())));
 
-        if(Optional.ofNullable(xmlTemplate.getMainTemplate()).isPresent()) {
+        if (Optional.ofNullable(xmlTemplate.getMainTemplate()).isPresent()) {
             ((JobTemplate) job).setMainTemplate(new ProjectFileMapper(xmlTemplate.getMainTemplate().getFile().getFileName(),
                     xmlTemplate.getMainTemplate().getFile().getSourcePath(), xmlTemplate.getMainTemplate().getFile().getTargetPath()));
             if (Optional.ofNullable(xmlTemplate.getMainTemplate().getTemplateFiles()).isPresent()) {
@@ -117,13 +121,12 @@ public class ConfigurationHandlerImpl {
     public static Font readXmlFont(com.marketahalikova.fopengineweb.xml.generated.Font xmlFont, Configuration configuration) {
         Font font = new Font(xmlFont.getFontName());
 
-        for(com.marketahalikova.fopengineweb.xml.generated.FontTriplet xmlFontTriplet :xmlFont.getFontTriplet()){
+        for (com.marketahalikova.fopengineweb.xml.generated.FontTriplet xmlFontTriplet : xmlFont.getFontTriplet()) {
             font.addTriplet(readXmlFontTriplet(xmlFontTriplet));
         }
 
         return font;
     }
-
 
 
     public static FontTriplet readXmlFontTriplet(com.marketahalikova.fopengineweb.xml.generated.FontTriplet xmlFontTriplet) {
@@ -132,25 +135,25 @@ public class ConfigurationHandlerImpl {
         fontTriplet.setInddName(xmlFontTriplet.getInddName());
         fontTriplet.setInddStyle(xmlFontTriplet.getInddStyle());
         fontTriplet.setMetricsFile(new ProjectFileMapper(xmlFontTriplet.getMetricsFile().getFileName(),
-                xmlFontTriplet.getMetricsFile().getSourcePath(),xmlFontTriplet.getMetricsFile().getTargetPath()));
+                xmlFontTriplet.getMetricsFile().getSourcePath(), xmlFontTriplet.getMetricsFile().getTargetPath()));
         fontTriplet.setFontFiles(xmlFontTriplet.getFile().stream().map(ConfigurationHandlerImpl::createProjectFileMapper)
                 .collect(Collectors.toSet()));
         return fontTriplet;
     }
 
 
-
     public Configuration readConfiguration(Path configurationPath) throws XmlException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Configuration.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            return (Configuration)unmarshaller.unmarshal(configurationPath.toFile());
+            return (Configuration) unmarshaller.unmarshal(configurationPath.toFile());
         } catch (JAXBException e) {
             throw new XmlException("JAXB fail", e);
         }
     }
 
-    public  static ProjectFileMapper createProjectFileMapper(File file){
+    public static ProjectFileMapper createProjectFileMapper(File file) {
         return new ProjectFileMapper(file.getFileName(), file.getSourcePath(), file.getTargetPath());
     }
+
 }

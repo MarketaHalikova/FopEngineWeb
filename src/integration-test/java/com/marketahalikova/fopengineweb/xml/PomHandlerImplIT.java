@@ -16,7 +16,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class PomHandlerIT {
+public class PomHandlerImplIT {
 
     static final Path TEST_POM = Paths.get("target/test-classes/pom.xml");
     static final Path TARGET_POM = Paths.get("target/test-classes/pom_saved.xml");
@@ -24,12 +24,12 @@ public class PomHandlerIT {
     public static final String PROJECT_ARTIFACT_1 = "generator-genera";
     public static final String PROJECT_VERSION_1 = "1.0-SNAPSHOT";
     public static final String NEW_VERSION = "new Version";
-    static PomHandler pomHandler;
+    static PomHandlerImpl pomHandler;
     final XPath xPath = XPathFactory.newInstance().newXPath();
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        pomHandler = new PomHandler(TEST_POM);
+        pomHandler = new PomHandlerImpl(TEST_POM);
     }
 
     @Test

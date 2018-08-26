@@ -4,12 +4,20 @@ import com.marketahalikova.fopengineweb.exceptions.FopEngineException;
 import com.marketahalikova.fopengineweb.model.Font;
 import com.marketahalikova.fopengineweb.model.FontTriplet;
 import com.marketahalikova.fopengineweb.model.Project;
+import com.marketahalikova.fopengineweb.model.ProjectFileMapper;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -20,89 +28,99 @@ public class FileSystemServiceImpl implements FileSystemService {
     @Value("${fopengine.git.working-directory}")
     private String workingDirectory = "";
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void deleteProjectDirectory(Project project) throws FopEngineException {
-// project directory has to be set
-// if exists, delete it with all content - Files.exists(),  FileUtils.deleteDirectory(projectDirectory.toFile());
+        Path projectDirectory = Optional.ofNullable(project.getProjectDirectory()).orElseThrow(() -> new FopEngineException(String.format("Project directory for project %s is not set!", project.getProjectName())));
+        if (Files.exists(projectDirectory)) {
+            try {
+                FileUtils.deleteDirectory(projectDirectory.toFile());
+            } catch (IOException e) {
+                throw new FopEngineException(String.format("Can't delete project directory of project %s!", project.getProjectName()));
+            }
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Path createProjectDirectory(String projectGitLink) throws FopEngineException {
-// gitLink not null
-// find repository name from gitlink
-// https://github.com/MarketaHalikova/FopEngineWeb.git   --> fopengineweb   - in lovercase - method on String - projectRepositoryName.toLowerCase()
-// find last character - projectGitLink.lastIndexOf
-// substring - projectGitLink.substring
-// replace in string - projectGitLink.replaceAll(".git", "");
-// create directory   - Files.createDirectory
-        return null;
-    }
+        @Override
+        public Path createProjectDirectory(String projectGitLink) throws FopEngineException {
+            if (projectGitLink == null) {
+                throw new FopEngineException("GitPath is null!");
+            }
+            int lastSlash = projectGitLink.lastIndexOf("/");
+            if (lastSlash < 5) {
+                throw new FopEngineException("Project git path is not correct:" + projectGitLink);
+            }
+            String repositoryName = projectGitLink.substring(lastSlash).replaceAll(".git", "");
+            try {
+                return Files.createDirectory(Paths.get(workingDirectory, repositoryName.toLowerCase()));
+            } catch (IOException e) {
+                throw new FopEngineException("Can't create project directory");
+            }
+        }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void deleteFontFromProject(Font font, Project project) throws FopEngineException {
-// delete font from project - exception if font does not exist in project
-// for every triplet - delete triplet using method deleteTripletFromProject
-// return triplet back to project
+        Set<FontTriplet> triplets = font.getFontTriplets().stream().collect(Collectors.toSet());
+        if (!project.getFontSet().remove(font)) {
+            throw new FopEngineException("Project doesn't contain deleted font: " + font.getFontName());
+        }
+        for (FontTriplet triplet : triplets) {
+            deleteTripletFromProject(triplet, project);
+        }
+        project.addFont(font);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void deleteTripletFromProject(FontTriplet fontTriplet, Project project) throws FopEngineException {
-// project dir must be set
-// project dir must exist
-// remove triplet from font - triplet have to exist in font
-// find if there is a triplet with the same metrics file - use method isTripletWithSameFontFiles
-// if not - delete files - metrics, font files   - use method deleteFontFiles
-// return triplet back
+
+        if (project.getProjectDirectory() == null) {
+            new FopEngineException("Project directory for project %s is not set!");
+        }
+
+        if (!Files.exists(project.getProjectDirectory())) {
+            new FopEngineException("Project directory for project %s does not exist!");
+        }
+
+        if (!fontTriplet.getFont().getFontTriplets().remove(fontTriplet)) {
+            throw new FopEngineException("Project doesn't contain deleted triplet: " + fontTriplet);
+        }
+
+
+        if (!isTripletWithSameFontFiles(project, fontTriplet)) {
+            deleteFontFiles(fontTriplet, project.getProjectDirectory());
+        }
+
+        fontTriplet.getFont().addTriplet(fontTriplet);
     }
 
-    /**
-     * Return true if there is other triplet with the same font files - it uses metrics file to check it
-     *
-     * @param project
-     * @param fontTriplet
-     * @return
-     */
+
     boolean isTripletWithSameFontFiles(Project project, FontTriplet fontTriplet) {
-// use stream project.getFonts().stream()
-// 1. map to get font triplets
-// 2. flatMap - all triplets from all fonts to one stream of tiplets     .flatMap(s -> s.stream())
-// 3. filter if a triplet has the same triplet.getMetricsFile()
-// 4. find if any exists - return true else return false
-
-        // Optional<FontTriplet> tripletsOpt = project.getFonts().stream()
-        // ???
-        // .flatMap(s -> s.stream())
-        //
-        //
-        // return tripletsOpt.isPresent();
-        return true;
+        Optional<FontTriplet> tripletsOpt = project.getFontSet().stream()
+                .map(font -> font.getFontTriplets())
+                .flatMap(s -> s.stream())
+                .filter(triplet -> triplet.getMetricsFile().equals(fontTriplet.getMetricsFile()))
+                .findFirst();
+        return tripletsOpt.isPresent();
     }
 
-    /**
-     * Delete triplet files from file system - metrics and all font files
-     * @param fontTriplet
-     * @param projectDirectory
-     * @throws FopEngineException
-     */
+
     void deleteFontFiles(FontTriplet fontTriplet, Path projectDirectory) throws FopEngineException {
-//        try {
-//            // Files.exists()
-//            // Files.delete()
-//        } catch (IOException e) {
-//            throw new FopEngineException(String.format("Can't delete file from directory %s", projectDirectory), e);
-//        }
+        try {
+            Path metricsPath = Paths.get(projectDirectory.toString(), fontTriplet.getMetricsFile().getFullTarget());
+            if (Files.exists(metricsPath)) {
+                Files.delete(metricsPath);
+            }
+            for (ProjectFileMapper fontFile : fontTriplet.getFontFiles()) {
+                Path filePath = Paths.get(projectDirectory.toString(), fontFile.getFullTarget());
+                if (Files.exists(filePath)) {
+                    Files.delete(filePath);
+                }
+            }
+        } catch (IOException e) {
+            throw new FopEngineException(String.format("Can't delete file from directory %s", projectDirectory), e);
+        }
     }
 
 }
