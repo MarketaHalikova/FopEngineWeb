@@ -108,12 +108,12 @@ public class FileSystemServiceImpl implements FileSystemService {
 
     void deleteFontFiles(FontTriplet fontTriplet, Path projectDirectory) throws FopEngineException {
         try {
-            Path metricsPath = Paths.get(projectDirectory.toString(), fontTriplet.getMetricsFile().getFullTarget());
+            Path metricsPath = Paths.get(projectDirectory.toString(), fontTriplet.getMetricsFile().getFullSource());
             if (Files.exists(metricsPath)) {
                 Files.delete(metricsPath);
             }
             for (ProjectFileMapper fontFile : fontTriplet.getFontFiles()) {
-                Path filePath = Paths.get(projectDirectory.toString(), fontFile.getFullTarget());
+                Path filePath = Paths.get(projectDirectory.toString(), fontFile.getFullSource());
                 if (Files.exists(filePath)) {
                     Files.delete(filePath);
                 }

@@ -192,4 +192,9 @@ public class XmlUtils {
             ((Element)node).setAttribute(attributeName, newValue);
         }
     }
+
+    public static void removeChildren(Node node) {
+        while (node.hasChildNodes())
+            node.removeChild(node.getFirstChild());
+    }
 }

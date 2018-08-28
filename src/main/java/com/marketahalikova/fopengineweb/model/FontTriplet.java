@@ -65,6 +65,22 @@ public class FontTriplet {
                 .orElse("");
     }
 
+    public String getEmbedFileSource() {
+        return fontFiles.stream()
+                .filter(f -> f.getFileName().endsWith("ttf") || f.getFileName().endsWith("pfb"))
+                .findAny()
+                .map(fontMapper -> fontMapper.getFullSource())
+                .orElse("");
+    }
+
+    public String getEmbedFileTarget() {
+        return fontFiles.stream()
+                .filter(f -> f.getFileName().endsWith("ttf") || f.getFileName().endsWith("pfb"))
+                .findAny()
+                .map(fontMapper -> fontMapper.getFullTarget())
+                .orElse("");
+    }
+
     public void setMetricsFile(ProjectFileMapper metricsFile) {
         metricsFile.setFileType(FileType.metrics_file);
         this.metricsFile = metricsFile;

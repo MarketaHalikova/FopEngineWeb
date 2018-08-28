@@ -30,7 +30,7 @@ public class FileSystemServiceImplIT {
     public static final String PROJECT_GIT_LINK = "https://github.com/MarketaHalikova/FopEngineWeb.git";
     public static final Path PROJECT_GIT_DIRECTORY = Paths.get(WORKING_DIRECTORY.toString(), "fopengineweb");
 
-    public static final String TARGET_FONT_DIRECTORY = "fonts";
+    public static final String FONT_DIRECTORY = "fonts";
     public static final String TRIPLET_1_METRICS = "JCarial.xml";
     public static final String TRIPLET_1_FILE1 = "JCarial.pfb";
     public static final String TRIPLET_1_FILE2 = "JCarial.pfm";
@@ -58,12 +58,13 @@ public class FileSystemServiceImplIT {
         fileSystemService.deleteProjectDirectory(project);
         FileUtil.copyDir(MASTER_PROJECT.toFile(), TEST_PROJECT.toFile());
 
-        triplet1_metrics = new ProjectFileMapper(TRIPLET_1_METRICS, "", TARGET_FONT_DIRECTORY);
-        triplet1_file1 = new ProjectFileMapper(TRIPLET_1_FILE1, "", TARGET_FONT_DIRECTORY);
-        triplet1_file2 = new ProjectFileMapper(TRIPLET_1_FILE2, "", TARGET_FONT_DIRECTORY);
+        triplet1_metrics = new ProjectFileMapper(TRIPLET_1_METRICS, FONT_DIRECTORY, FONT_DIRECTORY);
+        triplet1_file1 = new ProjectFileMapper(TRIPLET_1_FILE1, FONT_DIRECTORY, FONT_DIRECTORY);
+        triplet1_file2 = new ProjectFileMapper(TRIPLET_1_FILE2, FONT_DIRECTORY, FONT_DIRECTORY);
 
         triplet = new FontTriplet();
         triplet.setMetricsFile(triplet1_metrics);
+
         triplet.addFontFile(triplet1_file1);
         triplet.addFontFile(triplet1_file2);
     }
@@ -250,23 +251,23 @@ public class FileSystemServiceImplIT {
     @Test
     public void deleteFontFiles_shouldDeleteFiles() throws FopEngineException {
         assertThat(project.getProjectDirectory()).exists();
-        assertThat(Paths.get(project.getProjectDirectory().toString(), triplet.getMetricsFile().getFullTarget())).exists();
+        assertThat(Paths.get(project.getProjectDirectory().toString(), triplet.getMetricsFile().getFullSource())).exists();
         triplet.getFontFiles().forEach(f -> {
-            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullTarget())).exists();
+            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullSource())).exists();
         });
         fileSystemService.deleteFontFiles(triplet, project.getProjectDirectory());
-        assertThat(Paths.get(project.getProjectDirectory().toString(), triplet.getMetricsFile().getFullTarget())).doesNotExist();
+        assertThat(Paths.get(project.getProjectDirectory().toString(), triplet.getMetricsFile().getFullSource())).doesNotExist();
         triplet.getFontFiles().forEach(f -> {
-            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullTarget())).doesNotExist();
+            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullSource())).doesNotExist();
         });
     }
 
     @Test
     public void deleteFontFiles_filesDoesNotExist_shouldDoNothing() throws FopEngineException {
         fileSystemService.deleteFontFiles(triplet, project.getProjectDirectory());
-        assertThat(Paths.get(project.getProjectDirectory().toString(), triplet.getMetricsFile().getFullTarget())).doesNotExist();
+        assertThat(Paths.get(project.getProjectDirectory().toString(), triplet.getMetricsFile().getFullSource())).doesNotExist();
         triplet.getFontFiles().forEach(f -> {
-            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullTarget())).doesNotExist();
+            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullSource())).doesNotExist();
         });
         fileSystemService.deleteFontFiles(triplet, project.getProjectDirectory());
     }
@@ -281,17 +282,17 @@ public class FileSystemServiceImplIT {
 
     private void checkFilesExist(FontTriplet triplet) {
         // then
-        assertThat(Paths.get(TEST_PROJECT.toString(), triplet.getMetricsFile().getFullTarget())).exists();
+        assertThat(Paths.get(TEST_PROJECT.toString(), triplet.getMetricsFile().getFullSource())).exists();
         triplet.getFontFiles().forEach(f -> {
-            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullTarget())).exists();
+            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullSource())).exists();
         });
     }
 
     private void checkFilesNotExist(FontTriplet triplet) {
         // then
-        assertThat(Paths.get(TEST_PROJECT.toString(), triplet.getMetricsFile().getFullTarget())).doesNotExist();
+        assertThat(Paths.get(TEST_PROJECT.toString(), triplet.getMetricsFile().getFullSource())).doesNotExist();
         triplet.getFontFiles().forEach(f -> {
-            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullTarget())).doesNotExist();
+            assertThat(Paths.get(project.getProjectDirectory().toString(), f.getFullSource())).doesNotExist();
         });
     }
 }

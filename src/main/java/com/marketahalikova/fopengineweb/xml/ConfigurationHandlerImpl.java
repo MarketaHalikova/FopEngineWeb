@@ -7,18 +7,22 @@ import com.marketahalikova.fopengineweb.xml.generated.Configuration;
 import com.marketahalikova.fopengineweb.xml.generated.File;
 import com.marketahalikova.fopengineweb.xml.generated.Template;
 import com.marketahalikova.fopengineweb.xml.generated.Transformation;
+import org.springframework.stereotype.Component;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ConfigurationHandlerImpl {
+@Component
+public class ConfigurationHandlerImpl implements  ConfigurationHandler{
 
-    public static final String CONFIGURATION_FILE = "fopengine/fopengine-configuration.xml";
+    public static final String CONFIGURATION_FILE = "src/main/resources/fopengine/fopengine-configuration.xml";
 
 
     public Project createProject(String gitPath, Path projectDirectory) throws XmlException {
@@ -27,6 +31,7 @@ public class ConfigurationHandlerImpl {
         // new project with gitPath, projectName, description, MavenArtifact
         Project project = new Project(gitPath, configuration.getProjectName());
         project.setDescription(configuration.getDescription());
+        project.setProjectDirectory(projectDirectory);
         MavenArtifact mavenArtifact = new MavenArtifact(configuration.getGroup(), configuration.getArtifact(), configuration.getVersion());
         project.setMavenArtifact(mavenArtifact);
         project.setUserConfig(new ProjectFileMapper(configuration.getUserconfig().getFile().getFileName(), configuration.getUserconfig().getFile().getSourcePath(), configuration.getUserconfig().getFile().getTargetPath()));
@@ -40,7 +45,7 @@ public class ConfigurationHandlerImpl {
         // fonts
         if (Optional.ofNullable(configuration.getFonts()).isPresent()) {
             for (com.marketahalikova.fopengineweb.xml.generated.Font xmlFont : configuration.getFonts().getFont()) {
-                Font font = readXmlFont(xmlFont, configuration);
+                Font font = readXmlFont(xmlFont);
                 project.getFontSet().add(font);
             }
         }
@@ -118,7 +123,7 @@ public class ConfigurationHandlerImpl {
         return job;
     }
 
-    public static Font readXmlFont(com.marketahalikova.fopengineweb.xml.generated.Font xmlFont, Configuration configuration) {
+    public static Font readXmlFont(com.marketahalikova.fopengineweb.xml.generated.Font xmlFont) {
         Font font = new Font(xmlFont.getFontName());
 
         for (com.marketahalikova.fopengineweb.xml.generated.FontTriplet xmlFontTriplet : xmlFont.getFontTriplet()) {
@@ -156,4 +161,70 @@ public class ConfigurationHandlerImpl {
         return new ProjectFileMapper(file.getFileName(), file.getSourcePath(), file.getTargetPath());
     }
 
+    @Override
+    public void updateFonts(Project project) throws XmlException {
+        Configuration configuration = readConfiguration(Paths.get(project.getProjectDirectory().toString(), CONFIGURATION_FILE));
+        configuration.getFonts().getFont().clear();
+
+        configuration.getFonts().getFont().addAll(project.getFontSet().stream()
+                .map(font -> createXmlFont(font)).collect(Collectors.toSet()));
+
+        saveConfiguration(configuration, Paths.get(project.getProjectDirectory().toString(), CONFIGURATION_FILE));
+    }
+
+    @Override
+    public void updateProjectInXml(Project project) throws XmlException {
+        Configuration configuration = readConfiguration(Paths.get(project.getProjectDirectory().toString(), CONFIGURATION_FILE));
+        configuration.setDescription(project.getDescription());
+        configuration.setVersion(project.getMavenArtifact().getVersion());
+        saveConfiguration(configuration, Paths.get(project.getProjectDirectory().toString(), CONFIGURATION_FILE));
+    }
+
+
+    private com.marketahalikova.fopengineweb.xml.generated.Font createXmlFont(Font font) {
+        com.marketahalikova.fopengineweb.xml.generated.Font xmlFont = new com.marketahalikova.fopengineweb.xml.generated.Font();
+        xmlFont.setFontName(font.getFontName());
+        List<Object> triplets = font.fontTriplets.stream()
+                .map(triplet -> createTriplet(triplet)).collect(Collectors.toList());
+        xmlFont.getFontTriplet().addAll(triplets.stream().map(obj -> ((com.marketahalikova.fopengineweb.xml.generated.FontTriplet) obj)).collect(Collectors.toList()));
+        return xmlFont;
+    }
+
+    private com.marketahalikova.fopengineweb.xml.generated.FontTriplet createTriplet(FontTriplet triplet) {
+        com.marketahalikova.fopengineweb.xml.generated.FontTriplet xmlTriplet = new com.marketahalikova.fopengineweb.xml.generated.FontTriplet();
+        xmlTriplet.setFontStyle(triplet.getFontStyle().name());
+        xmlTriplet.setInddName(triplet.getInddName());
+        xmlTriplet.setInddStyle(triplet.getInddStyle());
+        com.marketahalikova.fopengineweb.xml.generated.FontTriplet.MetricsFile metricsFile
+                =  new com.marketahalikova.fopengineweb.xml.generated.FontTriplet.MetricsFile();
+        metricsFile.setFileName(triplet.getMetricsFile().getFileName());
+        metricsFile.setSourcePath(triplet.getMetricsFile().getSourcePath());
+        metricsFile.setTargetPath(triplet.getMetricsFile().getTargetPath());
+        xmlTriplet.setMetricsFile(metricsFile);
+        triplet.getFontFiles().forEach(f -> {
+            File file = new File();
+            file.setFileName(f.getFileName());
+            file.setSourcePath(f.getSourcePath());
+            file.setTargetPath(f.getTargetPath());
+            xmlTriplet.getFile().add(file);
+        });
+        return xmlTriplet;
+    }
+
+    /**
+     * Unmarshal xml configuration
+     *
+     * @param configurationPath
+     * @throws javax.xml.bind.JAXBException
+     * @throws java.io.FileNotFoundException
+     */
+    public void saveConfiguration(Configuration configuration, Path configurationPath) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(Configuration.class);
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            marshaller.marshal(configuration, configurationPath.toFile());
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

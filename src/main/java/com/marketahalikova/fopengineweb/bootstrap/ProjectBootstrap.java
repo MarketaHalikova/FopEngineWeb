@@ -103,6 +103,19 @@ public class ProjectBootstrap implements ApplicationListener<ContextRefreshedEve
         triplet4.setMetricsFile(metrics4);
         triplet5.setMetricsFile(metrics5);
 
+        ProjectFileMapper fontFile11 = new ProjectFileMapper("arial.pfb", "source_fontFile11", "target_fontFile11");
+        triplet1.addFontFile(fontFile11);
+        ProjectFileMapper fontFile12 = new ProjectFileMapper("arial.pfm", "source_fontFile11", "target_fontFile11");
+        triplet1.addFontFile(fontFile12);
+//        ProjectFileMapper fontFile21 = new ProjectFileMapper("arial2.pfm", "source_fontFile11", "target_fontFile11");
+//        triplet2.addFontFile(fontFile21);
+//
+//        ProjectFileMapper fontFile41 = new ProjectFileMapper("arial4.pfm", "source_fontFile11", "target_fontFile11");
+//        triplet2.addFontFile(fontFile41);
+//        ProjectFileMapper fontFile51 = new ProjectFileMapper("arial5.pfm", "source_fontFile11", "target_fontFile11");
+//        triplet5.addFontFile(fontFile51);
+
+
         font1.addTriplet(triplet1);
         font1.addTriplet(triplet2);
         font1.addTriplet(triplet3);

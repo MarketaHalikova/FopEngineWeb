@@ -34,8 +34,8 @@
 		<!--  __________________________________________________________ -->
 		<Font font-name="arialuni">
 			<Font-triplet indd-name="Arial Unicode MS" indd-style="Regular" font-style="normal">
-				<Metrics-file file-name="arialuni.xml" target-path="fonts"/>
-				<File file-name="arialuni.ttf" target-path="fonts"/>
+				<Metrics-file file-name="arialuni.xml" target-path="fonts" source-path="fonts" />
+				<File file-name="arialuni.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 		</Font>
 		<!--  __________________________________________________________ -->
@@ -43,16 +43,16 @@
 		<!--  __________________________________________________________ -->
 		<Font font-name="Arial">
 			<Font-triplet indd-name="Arial" indd-style="Regular" font-style="normal">
-				<Metrics-file file-name="arial.xml" target-path="fonts"/>
-				<File file-name="arial.ttf" target-path="fonts"/>
+				<Metrics-file file-name="arial.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="arial.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Bold" font-style="bold">
-				<Metrics-file file-name="arialb.xml" target-path="fonts"/>
-				<File file-name="arialb.ttf" target-path="fonts"/>
+				<Metrics-file file-name="arialb.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="arialb.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Italic" font-style="italic">
-				<Metrics-file file-name="ariali.xml" target-path="fonts"/>
-				<File file-name="ariali.ttf" target-path="fonts"/>
+				<Metrics-file file-name="ariali.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="ariali.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 		</Font>
 		<!--  __________________________________________________________ -->
@@ -60,16 +60,16 @@
 		<!--  __________________________________________________________ -->
 		<Font font-name="ArialBold">
 			<Font-triplet indd-name="Arial" indd-style="Bold" font-style="normal">
-				<Metrics-file file-name="arial.xml" target-path="fonts"/>
-				<File file-name="arial.ttf" target-path="fonts"/>
+				<Metrics-file file-name="arial.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="arial.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Black" font-style="bold">
-				<Metrics-file file-name="arialb.xml" target-path="fonts"/>
-				<File file-name="arialb.ttf" target-path="fonts"/>
+				<Metrics-file file-name="arialb.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="arialb.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Bold Italic" font-style="bolditalic">
-				<Metrics-file file-name="arialbi.xml" target-path="fonts"/>
-				<File file-name="arialbi.ttf" target-path="fonts"/>
+				<Metrics-file file-name="arialbi.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="arialbi.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 		</Font>
 		<!--  __________________________________________________________ -->
@@ -77,20 +77,20 @@
 		<!--  __________________________________________________________ -->
 		<Font font-name="JCArialBlack">
 			<Font-triplet indd-name="Arial" indd-style="Black" font-style="normal">
-				<Metrics-file file-name="ariblk.xml" target-path="fonts"/>
-				<File file-name="ariblk.ttf" target-path="fonts"/>
+				<Metrics-file file-name="ariblk.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="ariblk.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Black" font-style="bold">
-				<Metrics-file file-name="ariblk.xml" target-path="fonts"/>
-				<File file-name="ariblk.ttf" target-path="fonts"/>
+				<Metrics-file file-name="ariblk.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="ariblk.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Black Italic" font-style="italic">
-				<Metrics-file file-name="ariblki.xml" target-path="fonts"/>
-				<File file-name="ariblki.ttf" target-path="fonts"/>
+				<Metrics-file file-name="ariblki.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="ariblki.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Black Italic" font-style="bolditalic">
-				<Metrics-file file-name="ariblki.xml" target-path="fonts"/>
-				<File file-name="ariblki.ttf" target-path="fonts"/>
+				<Metrics-file file-name="ariblki.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="ariblki.ttf" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 		</Font>
 		<!--  __________________________________________________________ -->
@@ -99,23 +99,23 @@
 		<Font font-name="Helvetica">
 			<Font-triplet indd-name="Courier New" indd-style="Regular" font-style="normal">
 				<Metrics-file file-name="LTe50263_IRS.xml" target-path="fonts"/>
-				<File file-name="LTe50263_IRS.pfb" target-path="fonts"/>
-				<File file-name="LTe50263_IRS.pfm" target-path="fonts"/>
+				<File file-name="LTe50263_IRS.pfb" target-path="fonts" source-path="fonts"/>
+				<File file-name="LTe50263_IRS.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Courier New" indd-style="Bold" font-style="bold">
-				<Metrics-file file-name="LTe50265.xml" target-path="fonts"/>
-				<File file-name="LTe50265.pfb" target-path="fonts"/>
-				<File file-name="LTe50265.pfm" target-path="fonts"/>
+				<Metrics-file file-name="LTe50265.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="LTe50265.pfb" target-path="fonts" source-path="fonts"/>
+				<File file-name="LTe50265.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Courier New" indd-style="Italic" font-style="italic">
-				<Metrics-file file-name="" target-path="fonts/LTe50264.xml"/>
-				<File file-name="LTe50264.pfb" target-path="fonts"/>
-				<File file-name="LTe50264.pfm" target-path="fonts"/>
+				<Metrics-file file-name="LTe50264.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="LTe50264.pfb" target-path="fonts" source-path="fonts"/>
+				<File file-name="LTe50264.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Courier New" indd-style="Bold Italic" font-style="bolditalic">
-				<Metrics-file file-name="LTe50266.xml" target-path="fonts"/>
-				<File file-name="LTe50266.pfb" target-path="fonts"/>
-				<File file-name="LTe50266.pfm" target-path="fonts"/>
+				<Metrics-file file-name="LTe50266.xml" target-path="fonts" source-path="fonts"/>
+				<File file-name="LTe50266.pfb" target-path="fonts" source-path="fonts"/>
+				<File file-name="LTe50266.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 		</Font>
 	</Fonts>

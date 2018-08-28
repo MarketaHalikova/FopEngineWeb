@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration xsi:noNamespaceSchemaLocation="../../../../main/resources/GeneratorConfiguration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" artifact="test-genera" project-name="testProject" group="de.irs.fopengine" version="0.01" self-contained="false">
+<Configuration xsi:noNamespaceSchemaLocation="../../../../../../../main/resources/GeneratorConfiguration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" artifact="test-genera" project-name="testProject" group="de.irs.fopengine" version="0.01" self-contained="false">
 	<Userconfig>
 		<File file-name="userconfig.xml" target-path="conf"/>
 	</Userconfig>
@@ -34,9 +34,9 @@
 		<!--  __________________________________________________________ -->
 		<Font font-name="JCArial">
 			<Font-triplet indd-name="JC Arial" indd-style="Regular" font-style="normal">
-			    <Metrics-file target-path="fonts" file-name="JCarial.xml"/>
-				<File  file-name="JCarial.pfb" target-path="fonts"/>
-				<File  file-name="JCarial.pfm" target-path="fonts"/>
+			    <Metrics-file target-path="fonts" source-path="fonts" file-name="JCarial.xml"/>
+				<File  file-name="JCarial.pfb" target-path="fonts" source-path="fonts"/>
+				<File  file-name="JCarial.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 		</Font>
 		<!--  __________________________________________________________ -->
@@ -44,24 +44,24 @@
 		<!--  __________________________________________________________ -->
 		<Font font-name="JCArialBold">
 			<Font-triplet indd-name="Arial" indd-style="Bold" font-style="normal">
-			    <Metrics-file target-path="fonts" file-name="JCarialb.xml"/>
-				<File  file-name="JCarialb.pfb" target-path="fonts"/>
-				<File  file-name="JCarialb.pfm" target-path="fonts"/>
+			    <Metrics-file target-path="fonts" source-path="fonts" file-name="JCarialb.xml"/>
+				<File  file-name="JCarialb.pfb" target-path="fonts" source-path="fonts"/>
+				<File  file-name="JCarialb.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Black" font-style="bold">
-			    <Metrics-file target-path="fonts" file-name="JCariblk.xml"/>
-				<File  file-name="JCariblk.pfb" target-path="fonts"/>
-				<File  file-name="JCariblk.pfm" target-path="fonts"/>
+			    <Metrics-file target-path="fonts" source-path="fonts" file-name="JCariblk.xml"/>
+				<File  file-name="JCariblk.pfb" target-path="fonts" source-path="fonts"/>
+				<File  file-name="JCariblk.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Bold Italic" font-style="italic">
-			    <Metrics-file target-path="fonts" file-name="JCarialbi.xml"/>
-				<File  file-name="JCarialbi.pfb" target-path="fonts"/>
-				<File  file-name="JCarialbi.pfm" target-path="fonts"/>
+			    <Metrics-file target-path="fonts" source-path="fonts" file-name="JCarialbi.xml"/>
+				<File  file-name="JCarialbi.pfb" target-path="fonts" source-path="fonts"/>
+				<File  file-name="JCarialbi.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Black Italic" font-style="bolditalic">
-			    <Metrics-file target-path="fonts" file-name="JCarialbi.xml"/>
-				<File  file-name="JCarialbi.pfb" target-path="fonts"/>
-				<File  file-name="JCarialbi.pfm" target-path="fonts"/>
+			    <Metrics-file target-path="fonts" source-path="fonts" file-name="JCarialbi.xml"/>
+				<File  file-name="JCarialbi.pfb" target-path="fonts" source-path="fonts"/>
+				<File  file-name="JCarialbi.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 		</Font>
 		<!--  __________________________________________________________ -->
@@ -69,14 +69,14 @@
 		<!--  __________________________________________________________ -->
 		<Font font-name="JCArialBlack">
 			<Font-triplet indd-name="Arial" indd-style="Black" font-style="normal">
-			    <Metrics-file target-path="fonts" file-name="JCariblk.xml"/>
-				<File  file-name="JCariblk.pfb" target-path="fonts"/>
-				<File  file-name="JCariblk.pfm" target-path="fonts"/>
+			    <Metrics-file target-path="fonts" source-path="fonts" file-name="JCariblk.xml"/>
+				<File  file-name="JCariblk.pfb" target-path="fonts" source-path="fonts"/>
+				<File  file-name="JCariblk.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 			<Font-triplet indd-name="Arial" indd-style="Black Italic" font-style="bolditalic">
-			    <Metrics-file target-path="fonts" file-name="JCariblkk.xml"/>
-				<File  file-name="JCariblkk.pfb" target-path="fonts"/>
-				<File  file-name="JCariblkk.pfm" target-path="fonts"/>
+			    <Metrics-file target-path="fonts" source-path="fonts" file-name="JCariblkk.xml"/>
+				<File  file-name="JCariblkk.pfb" target-path="fonts" source-path="fonts"/>
+				<File  file-name="JCariblkk.pfm" target-path="fonts" source-path="fonts"/>
 			</Font-triplet>
 		</Font>
 	</Fonts>
