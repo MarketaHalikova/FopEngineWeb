@@ -34,13 +34,9 @@ public class FontTriplet {
     private ProjectFileMapper metricsFile;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "file_to_source",
-            joinColumns = @JoinColumn(name = "source_id"),
-            inverseJoinColumns = @JoinColumn(name = "file_id")
-    )
     @Where(clause = "FILE_TYPE = 'font_file'")
     private Set<ProjectFileMapper> fontFiles;
+
 
     public FontTriplet(){
         fontFiles = new HashSet<>(2);
