@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Service
+@Profile("!dev")
 public class GitServiceImpl implements  GitService{
 
     private String username = "";
