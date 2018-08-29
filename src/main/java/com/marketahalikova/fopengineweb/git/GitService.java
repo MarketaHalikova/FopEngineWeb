@@ -14,7 +14,7 @@ public interface GitService {
      * Clone remote repository to a local directory
      *
      */
-    void cloneRepository(String gitPath, Path localDirectory) throws GitException;
+    Path cloneRepository(String gitPath, Path localDirectory) throws GitException;
 
     /**
      * Check changes in repository and update local repository from remote if it is changed

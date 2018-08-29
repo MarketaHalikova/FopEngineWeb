@@ -1,0 +1,34 @@
+<!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by Robert Wachter (IRS GmbH) -->
+<!--<!DOCTYPE configuration SYSTEM "config.dtd">-->
+<!-- 
+     this file contains templates which allow an user easy 
+     configuration of Fop. Actually normally you don't need this configuration 
+     file, but if you need to change configuration, you should
+     always use this file and *not* config.xml. 
+     Usage: java org.apache.fop.apps.Fop -c userconfig.xml -fo fo-file -pdf pdf-file
+-->
+<configuration>
+    <fonts>
+		<!--  __________________________________________________________ -->
+		<!--                                           ArialUnicode      -->
+		<!--  __________________________________________________________ -->
+        <font metrics-file="fonts/arialuni.xml" kerning="no" embed-file="fonts/arialuni.ttf">
+            <font-triplet name="arialuni" style="normal" weight="normal" inddName="Arial Unicode MS" inddStyle="Regular"/>
+        </font>
+        <!--  __________________________________________________________ -->
+        <!--                                           JCArial           -->
+        <!--  __________________________________________________________ -->
+        <font metrics-file="fonts/arial.xml" kerning="no" embed-file="fonts/arial.ttf">
+            <font-triplet name="Arial" style="normal" weight="normal" inddName="Arial" inddStyle="Regular"/>
+        </font>
+        <font metrics-file="fonts/arialb.xml" kerning="no" embed-file="fonts/arialb.ttf">
+            <font-triplet name="Arial" style="normal" weight="bold" inddName="Arial" inddStyle="Bold"/>
+        </font>
+        <font metrics-file="fonts/ariali.xml" kerning="no" embed-file="fonts/ariali.ttf">
+            <font-triplet name="Arial" style="italic" weight="normal" inddName="Arial" inddStyle="Italic"/>
+        </font>
+        <font metrics-file="fonts/arialbi.xml" kerning="no" embed-file="fonts/arialbi.ttf">
+            <font-triplet name="Arial" style="italic" weight="bold" inddName="Arial" inddStyle="Bold Italic"/>
+        </font>
+	</fonts>
+</configuration>

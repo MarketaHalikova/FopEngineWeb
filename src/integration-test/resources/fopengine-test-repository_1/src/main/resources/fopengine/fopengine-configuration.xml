@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xsi:noNamespaceSchemaLocation="../../../main/resources/GeneratorConfiguration.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" artifact="test-genera" project-name="testProject 1" group="de.irs.fopengine" version="0.01" self-contained="false">
+	<Userconfig>
+		<File file-name="userconfig.xml" target-path="conf"/>
+	</Userconfig>
+	<Jobs>
+		<Job job-name="genera_idml" process-name="GENERATE_IDML">
+			<Main-schema>
+				<File file-name="Genera5DataDynamic.xsd" source-path="schema" target-path="schema"/>
+				<Schemas>
+					<File file-name="Genera5HtmlText.xsd" source-path="schema" target-path="schema"/>
+				</Schemas>
+			</Main-schema>
+		</Job>
+<!--		
+		<Job job-name="xsl_fo" process-name="GENERATE_XSL_FO" transformation-name="genera">
+			<Main-schema>
+				<File file-name="Genera5DataDynamic.xsd" source-path="schema" target-path="schema"/>
+				<Schemas>
+					<File file-name="Genera5HtmlText.xsd" source-path="schema" target-path="schema"/>
+					<File file-name="Genera4HtmlText.xsd" source-path="schema2" target-path="schema2"/>
+				</Schemas>
+			</Main-schema>
+		</Job>
+		<Job job-name="xsl_fo" process-name="GENERATE_XSL_FO" transformation-name="genera2"/>
+		<Job job-name="template" process-name="TEMPLATE_PDF" template-name="template1">
+			<Main-schema>
+				<File file-name="Template.xsd" source-path="schema" target-path="schema"/>
+			</Main-schema>
+		</Job>
+-->
+	</Jobs>
+	<Fonts>
+		<!--  __________________________________________________________ -->
+		<!--                                           JCArial           -->
+		<!--  __________________________________________________________ -->
+		<Font font-name="JCArial">
+			<Font-triplet indd-name="JC Arial" indd-style="Regular" font-style="normal">
+			    <Metrics-file target-path="fonts" file-name="JCarial.xml"/>
+				<File  file-name="JCarial.pfb" target-path="fonts"/>
+				<File  file-name="JCarial.pfm" target-path="fonts"/>
+			</Font-triplet>
+		</Font>
+		<!--  __________________________________________________________ -->
+		<!--                                           JCArialBold       -->
+		<!--  __________________________________________________________ -->
+		<Font font-name="JCArialBold">
+			<Font-triplet indd-name="Arial" indd-style="Bold" font-style="normal">
+			    <Metrics-file target-path="fonts" file-name="JCarialb.xml"/>
+				<File  file-name="JCarialb.pfb" target-path="fonts"/>
+				<File  file-name="JCarialb.pfm" target-path="fonts"/>
+			</Font-triplet>
+			<Font-triplet indd-name="Arial" indd-style="Black" font-style="bold">
+			    <Metrics-file target-path="fonts" file-name="JCariblk.xml"/>
+				<File  file-name="JCariblk.pfb" target-path="fonts"/>
+				<File  file-name="JCariblk.pfm" target-path="fonts"/>
+			</Font-triplet>
+			<Font-triplet indd-name="Arial" indd-style="Bold Italic" font-style="italic">
+			    <Metrics-file target-path="fonts" file-name="JCarialbi.xml"/>
+				<File  file-name="JCarialbi.pfb" target-path="fonts"/>
+				<File  file-name="JCarialbi.pfm" target-path="fonts"/>
+			</Font-triplet>
+			<Font-triplet indd-name="Arial" indd-style="Black Italic" font-style="bolditalic">
+			    <Metrics-file target-path="fonts" file-name="JCarialbi.xml"/>
+				<File  file-name="JCarialbi.pfb" target-path="fonts"/>
+				<File  file-name="JCarialbi.pfm" target-path="fonts"/>
+			</Font-triplet>
+		</Font>
+		<!--  __________________________________________________________ -->
+		<!--                                           JCArialBlack      -->
+		<!--  __________________________________________________________ -->
+		<Font font-name="JCArialBlack">
+			<Font-triplet indd-name="Arial" indd-style="Black" font-style="normal">
+			    <Metrics-file target-path="fonts" file-name="JCariblk.xml"/>
+				<File  file-name="JCariblk.pfb" target-path="fonts"/>
+				<File  file-name="JCariblk.pfm" target-path="fonts"/>
+			</Font-triplet>
+			<Font-triplet indd-name="Arial" indd-style="Black Italic" font-style="bolditalic">
+			    <Metrics-file target-path="fonts" file-name="JCariblkk.xml"/>
+				<File  file-name="JCariblkk.pfb" target-path="fonts"/>
+				<File  file-name="JCariblkk.pfm" target-path="fonts"/>
+			</Font-triplet>
+		</Font>
+	</Fonts>
+	<Transformations>
+		<Transformation name="genera" type="xsl" description="test transformation 1">
+			<Main-xsl>
+				<File file-name="genera5.xsl" target-path="conf" source-path="conf"/>
+				<Xsls>
+					<File file-name="main.xsl" target-path="conf" source-path="conf"/>
+					<File file-name="crop_marks.xsl" target-path="conf" source-path="conf"/>
+				</Xsls>
+			</Main-xsl>
+		</Transformation>
+		<Transformation name="genera2" type="xsl">
+			<Main-xsl>
+				<File file-name="genera5.xsl" target-path="conf" source-path="conf"/>
+			</Main-xsl>
+			<Graphics>
+				<File target-path="img" file-name="img1.jpg"></File>
+				<File target-path="img" file-name="img2.jpg"></File>
+			</Graphics>
+		</Transformation>
+	</Transformations>
+	<Services>
+		<Service service-key="pdf-output" builder-class="de.irs.generator.services.fop.PdfServiceBuilder"/>
+		<Service service-key="xsl-service" builder-class="de.irs.generator.services.xsl.XslServiceBuilder">
+			<Auxiliary-services>
+				<Auxiliary-service service-key="char-convert-service"/>
+			</Auxiliary-services>
+		</Service>
+		<Service service-key="char-convert-service" builder-class="de.irs.generator.services.charConvertService.CharConvertServiceBuilder"/>
+		<Service service-key="idml-service" builder-class="de.irs.generator.services.idml.IdmlServiceBuilder"/>
+	</Services>
+	<WorkFlow>
+		<Processes>
+			<Process name="GENERATE_IDML">
+				<StepLink step-key="READ_GENERA_XML_FOR_IDML"/>
+				<StepLink step-key="STEP_INDESIGN_OUTPUT"/>
+			</Process>
+			<Process name="GENERATE_XSL_FO">
+				<StepLink step-key="STEP_XSL_CONVERT"/>
+			</Process>
+		</Processes>
+		<Steps>
+			<Step step-key="STEP_XSL_CONVERT" output-file-mask="%%job-id%%_fo.fo" input-type="file" output-type="output_stream">
+				<Transformers>
+					<Transformer name="document" object-type="DOCUMENT" class="de.irs.generator.services.xsl.XslTransformer"/>
+				</Transformers>
+			</Step>
+			<Step step-key="READ_GENERA_XML" input-type="file" output-type="internal" output-file-mask="%%job-id%%_layout.xml">
+				<Transformers>
+					<Transformer name="document" object-type="DOCUMENT" class="de.irs.generator.genera.transformers.GeneraReaderTransformer" description="konvertuje data z xml do Generator structure"/>
+				</Transformers>
+			</Step>
+			<Step step-key="READ_GENERA_XML_FOR_IDML" input-type="file" output-type="internal" output-file-mask="%%job-id%%_layout.xml">
+				<Transformers>
+					<Transformer name="document" object-type="DOCUMENT" class="de.irs.generator.genera.transformers.GeneraReaderTransformer"/>
+				</Transformers>
+				<Postprocessors>
+					<Processor name="document xCorrection and yCorrection" class="de.irs.generator.genera.processors.CorrectionPP"/>
+				</Postprocessors>
+			</Step>
+			<Step step-key="STEP_INDESIGN_OUTPUT" input-type="internal" output-type="file" output-file-mask="%%job-id%%_indd.xml">
+				<Preprocessors>
+					<Processor name="make the spans" class="de.irs.generator.output.indd.processors.ProcessSpanPP"/>
+				</Preprocessors>
+				<Transformers>
+					<Transformer name="" object-type="" class="de.irs.generator.output.indd.inddTransformers.InddDocumentTransformer"/>
+				</Transformers>
+				<Postprocessors>
+					<Processor name="prepare redefined paragraph styles" class="de.irs.generator.output.indd.processors.ConsolideCharStylesPP"/>
+				</Postprocessors>
+			</Step>
+		</Steps>
+	</WorkFlow>
+	<Templates>
+		<Template template-name="template1">
+			<Main-template>
+				<File source-path="templates" target-path="templates" file-name="template1.xml"/>
+				<Template-files>
+					<File source-path="templates" target-path="templates" file-name="styles.xml"></File>
+					<File source-path="templates" target-path="templates" file-name="static-pages.xml"></File>
+				</Template-files>
+			</Main-template>
+			<Graphics>
+				<File target-path="img" file-name="img1.jpg"></File>
+				<File target-path="img" file-name="img2.jpg"></File>
+			</Graphics>
+		</Template>
+	</Templates>
+</Configuration>

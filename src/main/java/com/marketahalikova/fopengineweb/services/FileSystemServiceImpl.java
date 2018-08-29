@@ -52,13 +52,16 @@ public class FileSystemServiceImpl implements FileSystemService {
                 throw new FopEngineException("Project git path is not correct:" + projectGitLink);
             }
             String repositoryName = projectGitLink.substring(lastSlash + 1).replaceAll(".git", "");
+            Path projectDirectory = Paths.get(workingDirectory, repositoryName.toLowerCase());
             try {
                 File workingDirFile = new File(workingDirectory);
-                //added
                 if(!workingDirFile.exists()) {
                     workingDirFile.mkdirs();
                 }
-                return Files.createDirectory(Paths.get(workingDirectory, repositoryName.toLowerCase()));
+                if(Files.exists(projectDirectory)) {
+                    FileUtils.deleteDirectory(projectDirectory.toFile());
+                }
+                return Files.createDirectory(projectDirectory);
             } catch (IOException e) {
                 throw new FopEngineException(String.format("Can't create project directory %s in a the working directory %s. Git link is %s",
                         repositoryName, workingDirectory, projectGitLink));

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,16 +27,17 @@ public class GitServiceImpl implements  GitService{
 
     private Optional<UsernamePasswordCredentialsProvider> credentialsOptional = Optional.empty();
 
-
     @Override
-    public void cloneRepository(String gitPath, Path localDirectory) throws GitException {
+    public Path cloneRepository(String gitPath, Path localDirectory) throws GitException {
         try {
-            GitUtils.cloneRepository(gitPath, localDirectory.toString(),
+            Git git = GitUtils.cloneRepository(gitPath, localDirectory.toString(),
                     credentialsOptional.orElse(createCredentials()));
+            return Paths.get(git.getRepository().getDirectory().getParent());
         } catch (GitAPIException e) {
             throw new GitException(e);
         }
     }
+
 
     @Override
     public boolean matchRemote(Path localDirectory) throws GitException {

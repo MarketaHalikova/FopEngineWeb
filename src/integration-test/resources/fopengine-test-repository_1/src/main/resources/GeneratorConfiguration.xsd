@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 2 (x64) (http://www.altova.com) by Robert Wachter (IRS GmbH) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:attributeGroup name="file">
+		<xs:attribute name="source-path" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>link to file in jar</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="target-path" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>target folder in Genera</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="mavenArtifact">
+		<xs:attribute name="group" type="xs:string" use="required"/>
+		<xs:attribute name="artifact" type="xs:string" use="required"/>
+		<xs:attribute name="version" type="xs:string" use="required"/>
+	</xs:attributeGroup>
+	<xs:element name="Configuration">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Userconfig" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="File"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="Jobs"/>
+				<xs:element ref="Fonts" minOccurs="0"/>
+				<xs:element ref="Transformations" minOccurs="0"/>
+				<xs:element ref="Services" minOccurs="0"/>
+				<xs:element ref="WorkFlow"/>
+				<xs:element ref="Templates" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="project-name" type="xs:string" use="required"/>
+			<xs:attribute name="description" type="xs:string"/>
+			<xs:attributeGroup ref="mavenArtifact"/>
+			<xs:attribute name="self-contained" type="xs:boolean" default="false">
+				<xs:annotation>
+					<xs:documentation>true if project should be unpacked from resources at start of application</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Processor">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="class" type="xs:string" use="required"/>
+			<xs:attribute name="description" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Postprocessors">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Processor" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Step">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Preprocessors" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="Processor" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="Transformers" minOccurs="0"/>
+				<xs:element ref="Postprocessors" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="step-key" type="xs:string" use="required"/>
+			<xs:attribute name="output-file-mask"/>
+			<xs:attribute name="input-type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="file"/>
+						<xs:enumeration value="source"/>
+						<xs:enumeration value="string"/>
+						<xs:enumeration value="internal"/>
+						<xs:enumeration value="output_stream"/>
+						<xs:enumeration value="input_stream"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="output-type" use="required">
+				<xs:annotation>
+					<xs:documentation>output type </xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="file"/>
+						<xs:enumeration value="output_stream"/>
+						<xs:enumeration value="string"/>
+						<xs:enumeration value="internal"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Transformer">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="class" type="xs:string" use="required"/>
+			<xs:attributeGroup ref="object-type"/>
+			<xs:attribute name="description" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Transformers">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Transformer" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="object-type">
+		<xs:attribute name="object-type" type="xs:string" use="required"/>
+	</xs:attributeGroup>
+	<xs:element name="Processes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Process" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Process">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="StepLink" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="StepLink">
+		<xs:complexType>
+			<xs:attribute name="step-key" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Template">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Main-template">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="File"/>
+							<xs:element name="Template-files" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="File" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="Graphics" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="template-name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Modules">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Module" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Settings">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Fop" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence minOccurs="0" maxOccurs="unbounded">
+							<xs:element ref="Module"/>
+						</xs:sequence>
+						<xs:attribute name="pdflib-enabled" type="xs:boolean" use="required">
+							<xs:annotation>
+								<xs:documentation>usage of pdfLib is enabled</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="pdflib-version" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>pdfLib version</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="Modules" minOccurs="0"/>
+				<xs:element ref="Entries" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Font">
+		<xs:complexType>
+			<xs:sequence maxOccurs="4">
+				<xs:element ref="Font-triplet"/>
+			</xs:sequence>
+			<xs:attribute name="font-name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Transformation">
+		<xs:complexType>
+			<xs:sequence minOccurs="0">
+				<xs:element ref="Main-xsl" minOccurs="0"/>
+				<xs:element ref="Graphics" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="xsl"/>
+						<xs:enumeration value="generator"/>
+						<xs:enumeration value="layout"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="description"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Module">
+		<xs:complexType>
+			<xs:attribute name="name"/>
+			<xs:attributeGroup ref="mavenArtifact"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Transformations">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Transformation" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Fonts">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Font" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Font-triplet">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Metrics-file">
+					<xs:complexType>
+						<xs:attributeGroup ref="file"/>
+						<xs:attribute name="file-name" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="File" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="font-style" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="normal"/>
+						<xs:enumeration value="italic"/>
+						<xs:enumeration value="bold"/>
+						<xs:enumeration value="bolditalic"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="indd-name"/>
+			<xs:attribute name="indd-style"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Xsls">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="File" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Main-xsl">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="File"/>
+				<xs:element ref="Xsls" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Main-schema">
+		<xs:annotation>
+			<xs:documentation>main schema file</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="File"/>
+				<xs:element ref="Schemas" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Schemas">
+		<xs:annotation>
+			<xs:documentation>further schemas which are necessery for imports from other schemas</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="File" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Graphics">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="File" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="File">
+		<xs:complexType>
+			<xs:attribute name="file-name" use="required"/>
+			<xs:attributeGroup ref="file"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Entry">
+		<xs:complexType>
+			<xs:attribute name="key" type="xs:string" use="required"/>
+			<xs:attribute name="value" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Entries">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Entry" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Auxiliary-services">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Auxiliary-service" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Auxiliary-service">
+		<xs:complexType>
+			<xs:attribute name="service-key" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Services">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Service" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Service">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Auxiliary-services" minOccurs="0"/>
+				<xs:element ref="Entries" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="service-key" type="xs:string" use="required"/>
+			<xs:attribute name="builder-class" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WorkFlow">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Processes"/>
+				<xs:element ref="Steps" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Steps">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Step" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Templates">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Template" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Jobs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Job" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Job">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Main-schema" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="job-name" type="xs:string" use="required"/>
+			<xs:attribute name="process-name" type="xs:string" use="required"/>
+			<xs:attribute name="transformation-name" type="xs:string"/>
+			<xs:attribute name="template-name"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

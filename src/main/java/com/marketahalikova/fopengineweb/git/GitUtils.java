@@ -33,7 +33,7 @@ public class GitUtils {
     }
 
 
-    public static void cloneRepository(String url, String directory, UsernamePasswordCredentialsProvider credentials) throws GitAPIException {
+    public static Git cloneRepository(String url, String directory, UsernamePasswordCredentialsProvider credentials) throws GitAPIException {
 
         // clone the repo!
         boolean cloneAll = true;
@@ -42,7 +42,8 @@ public class GitUtils {
         command.setCredentialsProvider(credentials).
                 setCloneAllBranches(cloneAll)
                 .setURI(url)
-                .setDirectory(new File(directory)).call();
+                .setDirectory(new File(directory));
+        return command.call();
 
     }
 
