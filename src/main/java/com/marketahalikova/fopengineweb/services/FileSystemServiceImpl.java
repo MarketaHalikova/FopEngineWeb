@@ -54,12 +54,14 @@ public class FileSystemServiceImpl implements FileSystemService {
             String repositoryName = projectGitLink.substring(lastSlash + 1).replaceAll(".git", "");
             try {
                 File workingDirFile = new File(workingDirectory);
+                //added
                 if(!workingDirFile.exists()) {
                     workingDirFile.mkdirs();
                 }
                 return Files.createDirectory(Paths.get(workingDirectory, repositoryName.toLowerCase()));
             } catch (IOException e) {
-                throw new FopEngineException("Can't create project directory");
+                throw new FopEngineException(String.format("Can't create project directory %s in a the working directory %s. Git link is %s",
+                        repositoryName, workingDirectory, projectGitLink));
             }
         }
 
