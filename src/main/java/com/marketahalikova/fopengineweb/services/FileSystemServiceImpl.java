@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,8 +51,12 @@ public class FileSystemServiceImpl implements FileSystemService {
             if (lastSlash < 5) {
                 throw new FopEngineException("Project git path is not correct:" + projectGitLink);
             }
-            String repositoryName = projectGitLink.substring(lastSlash).replaceAll(".git", "");
+            String repositoryName = projectGitLink.substring(lastSlash + 1).replaceAll(".git", "");
             try {
+                File workingDirFile = new File(workingDirectory);
+                if(!workingDirFile.exists()) {
+                    workingDirFile.mkdirs();
+                }
                 return Files.createDirectory(Paths.get(workingDirectory, repositoryName.toLowerCase()));
             } catch (IOException e) {
                 throw new FopEngineException("Can't create project directory");

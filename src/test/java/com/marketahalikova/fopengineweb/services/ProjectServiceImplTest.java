@@ -1,7 +1,8 @@
 package com.marketahalikova.fopengineweb.services;
 
 import com.marketahalikova.fopengineweb.commands.ProjectDTO;
-import com.marketahalikova.fopengineweb.exceptions.NotFoundException;
+import com.marketahalikova.fopengineweb.exceptions.FopEngineException;
+import com.marketahalikova.fopengineweb.git.GitService;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import org.junit.Before;
@@ -9,34 +10,49 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 public class ProjectServiceImplTest {
 
-    ProjectServiceImpl projectService;
+    public static final Long ID = 23L;
+    public static final String PROJECT_DIRECTORY = "target/project-directory";
+
+    ProjectService projectService;
 
     @Mock
     ProjectRepository projectRepository;
+    GitService gitService;
+    FileSystemService fileSystemService;
+    XmlService xmlService;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-       // projectRepository = mock(ProjectRepository.class);
-        projectService = new ProjectServiceImpl(projectRepository);
+        projectRepository = mock(ProjectRepository.class);
+        gitService = mock(GitService.class);
+        fileSystemService = mock(FileSystemService.class);
+        xmlService = mock(XmlService.class);
+
+        projectService = new ProjectServiceImpl(projectRepository, gitService, fileSystemService,xmlService );
     }
+
 
     @Test
     public void getProjectsTest() throws Exception {
         Project project = new Project();
-        HashSet projectsData = new HashSet();
+        Set projectsData = new HashSet();
         projectsData.add(project);
 
-        when(projectService.getProjects()).thenReturn(projectsData);
+        given(projectRepository.findAll()).willReturn(projectsData);
 
         Set<Project> recipes = projectService.getProjects();
 
@@ -53,21 +69,21 @@ public class ProjectServiceImplTest {
 
         when(projectRepository.findById(anyLong())).thenReturn(projectOptional);
 
-        Project projectReturned = projectService.findById(1L);
+        Project projectReturned = projectService.getProjectById(1L);
 
         assertThat(projectReturned).isNotNull();
         verify(projectRepository, times(1)).findById(anyLong());
         verify(projectRepository, never()).findAll();
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = FopEngineException.class)
     public void getProjectByIdTestNotFound() throws Exception {
 
         Optional<Project> projectOptional = Optional.empty();
 
         when(projectRepository.findById(anyLong())).thenReturn(projectOptional);
 
-        Project recipeReturned = projectService.findById(1L);
+        Project recipeReturned = projectService.getProjectById(1L);
 
         //should go boom
     }
@@ -83,7 +99,7 @@ public class ProjectServiceImplTest {
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setId(1L);
 
-        ProjectDTO commandById = projectService.findCommandById(1L);
+        ProjectDTO commandById = projectService.getProjectCommandById(1L);
 
         assertThat(commandById).isNotNull();
         verify(projectRepository, times(1)).findById(anyLong());
@@ -91,40 +107,30 @@ public class ProjectServiceImplTest {
     }
 
     @Test
-    public void saveProjectCommandTest() throws Exception {
-
-        Project project = new Project();
-        ProjectDTO projectDTO = new ProjectDTO();
-
-        when(projectRepository.save(any())).thenReturn(project);
-
-        ProjectDTO projectDTOSaved = projectService.saveProjectCommand(projectDTO);
-
-        assertThat(projectDTOSaved).isNotNull();
-        verify(projectRepository, times(1)).save(any());
-        verify(projectRepository, never()).saveAll(any());
-
-    }
-
-    @Test
     public void saveProjectTest() throws Exception {
         Project project = new Project();
+        project.setId(ID);
+        Path projectDir = Paths.get(PROJECT_DIRECTORY);
+        project.setProjectDirectory(projectDir);
+        when(projectRepository.findById(anyLong())).thenReturn(Optional.of(project));
         when(projectRepository.save(any())).thenReturn(project);
-        Project projectSaved = projectService.saveProject(any());
+        Project projectSaved = projectService.updateProject(project);
         assertThat(projectSaved).isNotNull();
         verify(projectRepository, times(1)).save(any());
         verify(projectRepository, never()).saveAll(any());
     }
 
     @Test
-    public void testDeleteById() throws Exception {
+    public void testDeleteProjectById() throws Exception {
 
-        //given
+
         Long idToDelete = Long.valueOf(2L);
-        //when
-        projectService.deleteById(idToDelete);
-        //no 'when', since method has void return type
-        //then
+        Project project = new Project();
+        project.setId(idToDelete);
+        Optional<Project> projectOptional = Optional.of(project);
+        when(projectRepository.findById(anyLong())).thenReturn(projectOptional);
+        projectService.deleteProjectById(idToDelete);
+
         verify(projectRepository, times(1)).deleteById(anyLong());
     }
 }

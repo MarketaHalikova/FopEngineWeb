@@ -1,101 +1,112 @@
 package com.marketahalikova.fopengineweb.services;
 
 import com.marketahalikova.fopengineweb.commands.ProjectDTO;
+import com.marketahalikova.fopengineweb.enums.ProjectStatus;
 import com.marketahalikova.fopengineweb.exceptions.FopEngineException;
 import com.marketahalikova.fopengineweb.exceptions.GitException;
 import com.marketahalikova.fopengineweb.exceptions.XmlException;
+import com.marketahalikova.fopengineweb.git.GitService;
+import com.marketahalikova.fopengineweb.mappers.ProjectMapper;
 import com.marketahalikova.fopengineweb.model.Project;
+import com.marketahalikova.fopengineweb.model.User;
+import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
 @Service
-public class ProjectServiceImpl implements ProjectService{
+public class ProjectServiceImpl implements ProjectService {
 
+    private final ProjectRepository projectRepository;
+    private final GitService gitService;
+    private final FileSystemService fileSystemService;
+    private final XmlService xmlService;
+    private User user = new User("testUser", "");
+    public static final String COMMIT_MESSAGE = "Commit updated project";
+
+    public ProjectServiceImpl(ProjectRepository projectRepository, GitService gitService,
+                              FileSystemService fileSystemService, XmlService xmlService) {
+        this.projectRepository = projectRepository;
+        this.gitService = gitService;
+        this.fileSystemService = fileSystemService;
+        this.xmlService = xmlService;
+    }
 
     @Override
-    public Set<Project> getProjects() throws FopEngineException, GitException {
-        return null;
+    public Set<Project> getProjects() throws GitException {
+        Set<Project> projects = new HashSet<>();
+        projectRepository.findAll().iterator().forEachRemaining(projects::add);
+        gitService.matchAllProjects(projects);
+        return projects;
     }
 
     @Override
     public Project getProjectById(Long id) throws FopEngineException, GitException {
-        return null;
+        Optional<Project> result = projectRepository.findById(id);
+        Project project = result.orElseThrow(() -> new FopEngineException("Project not found. Id = " + id));
+        gitService.matchRemote(project.getProjectDirectory());
+        return project;
     }
 
     @Override
     public ProjectDTO getProjectCommandById(Long id) throws FopEngineException, GitException {
-        return null;
+        return ProjectMapper.INSTANCE.projectToProjectDTO(getProjectById(id));
     }
+
 
     @Override
     public void deleteProjectById(Long id) throws FopEngineException, GitException {
-
+        Project project = getProjectById(id);
+        fileSystemService.deleteProjectDirectory(project);
+        projectRepository.deleteById(id);
     }
 
     @Override
-    public Project updateProject(Project project) throws FopEngineException, GitException, XmlException {
-        return null;
+    public Project updateProject(Project detachedProject) throws FopEngineException, GitException, XmlException {
+        Optional<Project> result = projectRepository.findById(detachedProject.getId());
+        Project backupProjectFromDatabase = result.orElseThrow(() -> new FopEngineException("Project not found. Id = "
+                + detachedProject.getId()));
+        try {
+            gitService.matchRemote(detachedProject.getProjectDirectory());
+        } catch (GitException e) {
+            log.error("Matching project with id:" + detachedProject.getId() + " was unsuccessful, project was not updated");
+            throw e;
+        }
+        try {
+            xmlService.updateProjectInXml(detachedProject);
+        } catch (XmlException e) {
+            log.error("Updating xml of project withid: " + detachedProject.getId() + " was unsuccessful, project was not updated");
+            throw e;
+        }
+        try {
+            gitService.commitProject(detachedProject.getProjectDirectory(),
+                    COMMIT_MESSAGE, user);
+            detachedProject.setProjectStatus(ProjectStatus.CHANGED);
+            Project savedProject = projectRepository.save(detachedProject);
+            log.debug("Saved updated project id: " + savedProject.getId());
+            return savedProject;
+        } catch (GitException e) {
+            log.error("Error while committing project with id: " + detachedProject.getId()+ " - project was not updated");
+            xmlService.updateProjectInXml(backupProjectFromDatabase);
+            throw e;
+        }
     }
 
     @Override
-    public Project registerNewProject(ProjectDTO project) throws FopEngineException, XmlException {
-        return null;
+    public Project registerNewProject(ProjectDTO projectCommand) throws FopEngineException, XmlException {
+        Path projectPath = fileSystemService.createProjectDirectory(projectCommand.getGitPath());
+        try {
+            gitService.cloneRepository(projectCommand.getGitPath(), projectPath);
+        } catch (GitException e) {
+            throw new FopEngineException(String.format("Can't clone remote git repository %s to %s ", projectCommand.getGitPath(), projectPath), e);
+        }
+        Project newProject = xmlService.readProject(projectCommand.getGitPath(), projectPath);
+        return projectRepository.save(newProject);
     }
 
-
-//    public ProjectServiceImpl(ProjectRepository projectRepository) {
-//        this.projectRepository = projectRepository;
-//
-//    }
-//
-//    @Override
-//    public Set<Project> getProjects() {
-//        Set<Project> projects = new HashSet<>();
-//        projectRepository.findAll().forEach(projects::add);
-//        return projects;
-//    }
-//
-//    @Override
-//    public Project findById(Long l) {
-//
-//        Optional<Project> projectOptional = projectRepository.findById(l);
-//
-//        if (!projectOptional.isPresent()) {
-//            throw new NotFoundException("Recipe Not Found");
-//        }
-//
-//        return projectOptional.get();
-//    }
-//
-//    @Transactional
-//    @Override
-//    public ProjectDTO saveProjectCommand(ProjectDTO projectDTO) {
-//        Project detachedProject = ProjectMapper.INSTANCE.projectDTOToProject(projectDTO);
-//
-//        Project savedProject = projectRepository.save(detachedProject);
-//        log.debug("Saved ProjectId:" + savedProject.getId());
-//        return ProjectMapper.INSTANCE.projectToProjectDTO(savedProject);
-//    }
-//
-//    @Transactional
-//    @Override
-//    public ProjectDTO findCommandById(Long l) {
-//        return ProjectMapper.INSTANCE.projectToProjectDTO(findById(l));
-//    }
-//
-//
-//    @Override
-//    public Project saveProject(Project detachedProject) {
-//        Project savedProject = projectRepository.save(detachedProject);
-//        log.debug("Saved project id: " + savedProject.getId());
-//        return savedProject;
-//    }
-//
-//    @Override
-//    public void deleteById(Long idToDelete) {
-//        projectRepository.deleteById(idToDelete);
-//    }
 }

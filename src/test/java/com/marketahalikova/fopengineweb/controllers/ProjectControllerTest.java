@@ -1,6 +1,5 @@
 package com.marketahalikova.fopengineweb.controllers;
 
-import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.services.ProjectService;
 import org.junit.Before;
@@ -15,7 +14,6 @@ import org.springframework.ui.Model;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -64,38 +62,16 @@ public class ProjectControllerTest {
         projects.add(project1);
         projects.add(project2);
 
-        Set<Project> projects1 = new HashSet<>();
-        projects1.add(project1);
-        projects1.add(project2);
-
         when(projectService.getProjects()).thenReturn(projects);
 
-        // -------------------------------------------------------------
-
-//        ArgumentCaptor<Set<Project>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
-//
-//        //when
-//        String viewName = controller.getIndexPage(model);
-//
-//
-//        //then
-//        assertEquals("projectlist", viewName);
-//        verify(projectService, times(1)).getProjects();
-//        verify(model, times(1)).addAttribute(eq("projectList"), argumentCaptor.capture());
-//        Set<Project> setInController = argumentCaptor.getValue();
-//        assertEquals(2, setInController.size());
-
-
-        // ------------------------------------------------
-
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-       when(projectService.getProjects()).thenReturn(projects);
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("projectlist"))
-                .andExpect(model().attribute("projectList", projects1))
-                .andExpect(model().attributeExists("projectList"));
+                .andExpect(model().attributeExists("projectList"))
+                .andExpect(model().attribute("projectList", projects));
+
 
         mockMvc.perform(get(""))
                 .andExpect(status().isOk());
@@ -112,7 +88,7 @@ public class ProjectControllerTest {
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        when(projectService.findById(eq(1L))).thenReturn(project);
+        when(projectService.getProjectById(eq(1L))).thenReturn(project);
 
         // when
         mockMvc.perform(get("/project/1/show"))
@@ -135,23 +111,26 @@ public class ProjectControllerTest {
     @Test
     public void saveOrUpdateProjectTest() throws Exception {
         // given
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setId(ID);
-
+        Project project = new Project();
+        project.setId(ID);
+        Project savedProject = new Project();
+        savedProject.setId(ID);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        when(projectService.saveProjectCommand(any())).thenReturn(projectDTO);
-
+        when(projectService.getProjectById(eq(ID))).thenReturn(project);
+        when(projectService.updateProject(project)).thenReturn(savedProject);
         // when
         mockMvc.perform(post("/project")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                    .param("gitPath", "some gitPath")
-                    .param("description", "some string"))
+                .param("gitPath", "some gitPath")
+                .param("id", "" + ID)
+                .param("description", "some string"))
                 //then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/project/" + projectDTO.getId() + "/show"));
-        verify(projectService, times(1)).saveProjectCommand(any());
-       }
+                .andExpect(view().name("redirect:/project/" + project.getId() + "/show"));
+        verify(projectService, times(1)).updateProject(project);
+        verify(projectService, times(1)).getProjectById(eq(ID));
+    }
 
     @Test
     public void testDeleteAction() throws Exception {
@@ -160,9 +139,8 @@ public class ProjectControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        verify(projectService, times(1)).deleteById(anyLong());
+        verify(projectService, times(1)).deleteProjectById(anyLong());
     }
-
 
 
 }
