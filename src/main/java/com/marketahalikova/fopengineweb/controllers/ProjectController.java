@@ -98,7 +98,7 @@ public class ProjectController {
         try {
             if (projectCommand.getId() == null) {
                 Project newProject = null;
-
+                System.out.println(projectCommand.getDescription());
                 newProject = projectService.registerNewProject(projectCommand);
 
                 log.debug("controller new Project called. New Project id = " + newProject.getId());
@@ -106,6 +106,7 @@ public class ProjectController {
             } else {
                 Project tmp = projectService.getProjectById(projectCommand.getId());
                 tmp.setDescription(projectCommand.getDescription());
+
                 Project savedProject = projectService.updateProject(tmp);
                 log.debug("controller update Project called. Updated Project id = " + savedProject.getId());
                 return "redirect:/project/" + savedProject.getId() + "/show";

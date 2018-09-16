@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -31,6 +32,7 @@ public class Project {
     private ProjectStatus projectStatus;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    @OrderBy
     private Set<Font> fontSet;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -50,7 +52,7 @@ public class Project {
 
     public Project() {
         jobs = new HashSet<>();
-        fontSet = new HashSet<>();
+        fontSet = new LinkedHashSet<>();
         projectStatus = ProjectStatus.OK;
         dependencies = new HashSet<>();
     }

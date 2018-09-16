@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Font Detail</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+    <body>
+        <!--/*@thymesVar id="font" type="com.marketahalikova.fopengineweb.model.Font"*/-->
+        <div class="container-fluid" style="margin-top: 10px">
+            <div class="row">
+                <div class="col-md-2">
+                    <img src="../../static/img/irs.jpg" th:src="@{/img/irs.jpg}" class="img-responsive">
+                </div>
+                <div class="col-md-4 col-md-offset-2 text-center">
+                    <h1 style="font-size:500%;font-weight: bold;">Fop Engine</h1>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 50px">
+                <div class="col-md-10 col-md-offset-1">
+
+                    <ul class="nav nav-tabs nav-justified" style="font-weight: bold">
+                        <li class="active"><a href="#" th:href="@{'/'}" >Projects</a></li>
+                        <li><a href="#">Fonts</a></li>
+                        <li><a href="#">Project Tree</a></li>
+                        <li><a href="#">Logs</a></li>
+                        <li><a href="#">Generate</a></li>
+                    </ul>
+
+                    <div class="panel panel-primary">
+                        <form>
+                            <div class="panel-group">
+                                <div class="panel-primary">
+                                    <div class="row">
+                                        <div class="col-md-1 " style="margin-top: 10px; margin-left: 15px">
+                                            <a class="btn btn-primary" th:href="'/project/'+${font.project.id}+'/show'" style="padding-left: 35px; padding-right: 35px">Back</a>
+                                        </div>
+                                        <div class="col-md-1 " style="margin-top: 10px">
+                                            <a class="btn btn-danger" th:href="'/project/'+${font.project.id}+'/font/'+${font.id}+'/delete'">Delete Font</a>
+                                        </div>
+                                        <div class="col-md-2 pull-right ">
+                                            <h2>
+                                                <span th:text="${font.project.projectName}">project name
+                                                </span>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-center" style="padding: 10px">View Font</h1>
+                                    </div>
+                                    <div class="panel-body">
+
+                                        <div class="row">
+
+                                            <div class="col-md-1 col-md-offset-2 text-right" style="margin-top: 50px; margin-bottom: 10px">
+                                                <label>Font Name</label>
+                                            </div>
+                                            <div class="col-md-6 " style="margin-top: 45px;  margin-bottom: 10px">
+                                                <input readonly type="text" class="form-control" th:value="${font.fontName}">
+                                            </div>
+                                            <div class="col-md-2 form-group" style="margin-top: 45px;  margin-bottom: 10px">
+                                                <a th:href="@{'/project/' + ${font.project.id} + '/font/'+ ${font.id} + '/edit'}"  class="btn btn-primary ">Edit Name</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-2 col-md-offset-1" style="padding: 20px 0px 10px 0px">
+                                                <h3 style="font-weight: bold">Triplets:</h3>
+                                            </div>
+                                        </div>
+
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-2 col-md-offset-2" >
+                                                    <div class="form-group" id="triplet_selector" style="padding-left: 50px">
+                                                        <div class="custom-control custom-radio" th:each="triplet : ${font.fontTriplets}" >
+                                                            <input type="radio" class="custom-control-input" th:id="${triplet.id}">
+                                                            <label class="custom-control-label" th:for="${triplet.id}"
+                                                                   th:text="${triplet.fontStyle}">bold 1</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-3">
+                                                    <div class="form-group triplet_info" th:each="triplet : ${font.fontTriplets}" th:id="'info' + ${triplet.id}">
+                                                        <label class="col-form-label" for="style">Triplet Style</label>
+                                                        <input readonly class="form-control" id="style" size="20" type="text"
+                                                               th:value="${triplet.fontStyle}">
+                                                        <label class="col-form-label" for="indesign_name">Indesign Name</label>
+                                                        <input readonly class="form-control" id="indesign_name" size="20" type="text"
+                                                               th:value="${triplet.inddName}">
+                                                        <label class="col-form-label" for="indesign_style">Indesign Style</label>
+                                                        <input readonly class="form-control" id="indesign_style" size="20" type="text"
+                                                               th:value="${triplet.inddStyle}">
+                                                        <div th:each="file : ${triplet.fontFiles}">
+                                                            <label class="col-form-label" th:for="${triplet.id} + '_' + ${file.fileName}">File</label>
+                                                            <input readonly class="form-control" th:id="${triplet.id} + '_' + ${file.fileName}"
+                                                                   size="20" type="text" th:value="${file.fileName}">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                        <div class="btn-group-vertical" style="padding-left: 50px">
+                                                            <a th:if="${#lists.size(font.fontTriplets)<4}" th:href="@{'/font/' + ${font.id} + '/triplet/new'}" class="btn btn-success" style="margin-top: 50px">New Triplet</a>
+                                                            <a th:if="${not #lists.isEmpty(font.fontTriplets)}" id="btn_edittriplet"  class="btn btn-primary" style="margin-top: 20px">Edit Triplet</a>
+                                                            <a th:if="${not #lists.isEmpty(font.fontTriplets)}" id="btn_dlttriplet" class="btn btn-danger" style="margin-top: 20px">Delete Triplet</a>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <script src="/js/main.js"></script>
+        </div>
+    </body>
+</html>

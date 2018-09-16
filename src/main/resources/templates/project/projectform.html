@@ -18,18 +18,49 @@
 </head>
 <body>
 <!--/*@thymesVar id="project" type="com.marketahalikova.fopengineweb.model.Project"*/-->
-<div class="container-fluid" style="margin-top: 20px">
+<div class="container-fluid" style="margin-top: 10px">
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-2">
+            <img src="../../static/img/irs.jpg" th:src="@{/img/irs.jpg}" class="img-responsive">
+        </div>
+        <div class="col-md-4 col-md-offset-2 text-center">
+            <h1 style="font-size:500%;font-weight: bold;">Fop Engine</h1>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 50px">
+        <div class="col-md-10 col-md-offset-1">
+
+            <ul class="nav nav-tabs nav-justified" style="font-weight: bold">
+                <li class="active"><a href="#" th:href="@{'/'}" >Projects</a></li>
+                <li><a href="#">Fonts</a></li>
+                <li><a href="#" >Project Tree</a></li>
+                <li><a href="#">Logs</a></li>
+                <li><a href="#">Generate</a></li>
+            </ul>
+
             <div class="panel panel-primary">
                 <form th:object="${project}" th:action="@{/project/}"  method="post">
                     <input  type="hidden"  th:field="*{id}">
                     <div class="panel-group">
                         <div class="panel-primary">
-                            <div class="panel-heading">
-                                <h1 th:if="${project.id == null}" class="panel-title">New Project</h1>
-                                <h1 th:unless="${project.id == null}" class="panel-title">Update Project</h1>
+
+                            <div class="row">
+                                <div class="col-md-1 " style="margin-top: 10px; margin-left: 15px">
+                                    <a th:unless="${project.id == null}" class="btn btn-primary" href="#" th:href="@{'/project/' + ${project.id} + '/show'}" style="padding-left: 35px; padding-right: 35px">Back</a>
+                                    <a th:if="${project.id == null}" class="btn btn-primary" href="/project" style="padding-left: 35px; padding-right: 35px">Back</a>
+                                </div>
+                                <div class="col-md-2 pull-right ">
+                                    <h2 th:unless="${project.id == null}">
+                                                <span th:text="${project.projectName}">project name
+                                                </span>
+                                    </h2>
+                                </div>
                             </div>
+                            <div>
+                                <h1 th:if="${project.id == null}" class=" text-center" style="padding: 10px">New Project</h1>
+                                <h1 th:unless="${project.id == null}" class="text-center" style="padding: 10px">Edit Project Header</h1>
+                            </div>
+
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-12 form-group">
@@ -39,9 +70,8 @@
                                         <textarea rows="6" class="form-control" th:field="*{description}">Description here</textarea>
                                     </div>
                                     <div class="col-md-12 form-group">
-                                        <a class="btn btn-primary" href="/project">Back</a>
-                                        <button th:if="${project.id == null}" type="submit" class="btn btn-primary pull-right">Create Project</button>
-                                        <button th:unless="${project.id == null}" type="submit" class="btn btn-primary pull-right">Update Project</button>
+                                        <button th:if="${project.id == null}" type="submit" class="btn btn-success pull-right">Create Project</button>
+                                        <button th:unless="${project.id == null}" type="submit" class="btn btn-success pull-right">Update Project</button>
                                     </div>
                                 </div>
                             </div>

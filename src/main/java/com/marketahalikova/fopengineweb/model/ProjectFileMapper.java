@@ -32,6 +32,11 @@ public class ProjectFileMapper {
     }
 
     public String getFullSource() {
-        return Paths.get(XmlService.PROJECT_RESOURCES_DIRECTORY, sourcePath, fileName).toString();
+        if(sourcePath==null){
+            return Paths.get(XmlService.PROJECT_RESOURCES_DIRECTORY, fileName).toString();
+        } else {
+            return Paths.get(XmlService.PROJECT_RESOURCES_DIRECTORY, sourcePath, fileName).toString();
+        }
+
     }
 }

@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Data
 @Entity
-public class Font {
+public class Font implements Comparable<Font>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +28,7 @@ public class Font {
 
     public Font(){
         fontTriplets = new HashSet<>(4);
+
     }
 
     public Font(String fontName) {
@@ -43,4 +44,25 @@ public class Font {
     public void setFontTriplets(Set<FontTriplet> fontTriplets) {
         this.fontTriplets = fontTriplets;
         fontTriplets.forEach(t -> t.setFont(this));
-    }}
+    }
+
+    public Set<String> getAbsentTripletStyles(){
+        Set<String> absentStyles = new HashSet<>(4);
+        absentStyles.add("normal");
+        absentStyles.add("bold");
+        absentStyles.add("italic");
+        absentStyles.add("bolditalic");
+        Set<String> presentStyles = new HashSet<>(4);
+        for (FontTriplet f :fontTriplets
+             ) {
+            presentStyles.add(f.getFontStyle().toString());
+        }
+        absentStyles.removeAll(presentStyles);
+        return absentStyles;
+    }
+
+    @Override
+    public int compareTo(Font o) {
+        return getFontName().toLowerCase().compareTo(o.getFontName().toLowerCase());
+    }
+}

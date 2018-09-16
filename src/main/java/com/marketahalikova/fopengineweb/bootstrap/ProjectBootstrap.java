@@ -1,11 +1,15 @@
 package com.marketahalikova.fopengineweb.bootstrap;
 
+import com.marketahalikova.fopengineweb.commands.ProjectDTO;
 import com.marketahalikova.fopengineweb.enums.FileType;
 import com.marketahalikova.fopengineweb.enums.FontStyle;
+import com.marketahalikova.fopengineweb.exceptions.FopEngineException;
+import com.marketahalikova.fopengineweb.exceptions.XmlException;
 import com.marketahalikova.fopengineweb.model.*;
 import com.marketahalikova.fopengineweb.repositories.FontTripletRepository;
 import com.marketahalikova.fopengineweb.repositories.ProjectRepository;
 import com.marketahalikova.fopengineweb.repositories.UserRepository;
+import com.marketahalikova.fopengineweb.services.ProjectService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -20,17 +24,39 @@ public class ProjectBootstrap implements ApplicationListener<ContextRefreshedEve
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final FontTripletRepository fontTripletRepository;
+    private final ProjectService projectService;
 
-    public ProjectBootstrap(UserRepository userRepository, ProjectRepository projectRepository, FontTripletRepository fontTripletRepository) {
+    public static String PROJECT_1 = "https://github.com/MarketaTest/fopengine-test-repository_1.git";
+    public static String PROJECT_2 = "https://github.com/MarketaTest/fopengine-test-repository_2.git";
+
+    public ProjectBootstrap(UserRepository userRepository, ProjectRepository projectRepository, FontTripletRepository fontTripletRepository, ProjectService projectService) {
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
         this.fontTripletRepository = fontTripletRepository;
+        this.projectService = projectService;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         System.out.println("Bootstrap project data");
-        projectRepository.saveAll(getProjects());
+        //projectRepository.saveAll(getProjects());
+        projectRepository.saveAll(getRealProjects());
+    }
+
+    public List<Project> getRealProjects() {
+        List<Project> projects = new ArrayList<>();
+        try {
+            ProjectDTO projectDTO = new ProjectDTO();
+            projectDTO.setGitPath(PROJECT_1);
+            projects.add(projectService.registerNewProject(projectDTO));
+
+            ProjectDTO projectDTO2 = new ProjectDTO();
+            projectDTO2.setGitPath(PROJECT_2);
+            projects.add(projectService.registerNewProject(projectDTO2));
+        } catch (XmlException | FopEngineException e) {
+            throw new RuntimeException(e);
+        }
+        return projects;
     }
 
     private List<Project> getProjects(){

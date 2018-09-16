@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -39,8 +39,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Set<Project> getProjects() throws GitException {
-        Set<Project> projects = new HashSet<>();
-        projectRepository.findAll().iterator().forEachRemaining(projects::add);
+        Set<Project> projects = new LinkedHashSet<>();
+        projectRepository.findAllByOrderByProjectNameAsc().iterator().forEachRemaining(projects::add);
         gitService.matchAllProjects(projects);
         return projects;
     }
@@ -106,6 +106,9 @@ public class ProjectServiceImpl implements ProjectService {
             throw new FopEngineException(String.format("Can't clone remote git repository %s to %s ", projectCommand.getGitPath(), projectPath), e);
         }
         Project newProject = xmlService.readProject(projectCommand.getGitPath(), projectPath);
+        if(projectCommand.getDescription()!= null && !projectCommand.getDescription().equals("")){
+            newProject.setDescription(projectCommand.getDescription());
+        }
         return projectRepository.save(newProject);
     }
 

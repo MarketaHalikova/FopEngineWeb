@@ -57,7 +57,7 @@ public class FontTriplet {
         return fontFiles.stream()
                 .filter(f -> f.getFileName().endsWith("ttf") || f.getFileName().endsWith("pfb"))
                 .findAny()
-                .map(fontMapper -> fontMapper.getFullTarget())
+                .map(fontMapper -> fontMapper.getFileName())
                 .orElse("");
     }
 

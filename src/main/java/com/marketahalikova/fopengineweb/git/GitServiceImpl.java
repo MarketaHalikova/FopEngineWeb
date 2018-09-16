@@ -31,6 +31,7 @@ public class GitServiceImpl implements  GitService{
 
     @Override
     public Path cloneRepository(String gitPath, Path localDirectory) throws GitException {
+        System.out.println("GitServiceImpl is used");
         try {
             Git git = GitUtils.cloneRepository(gitPath, localDirectory.toString(),
                     credentialsOptional.orElse(createCredentials()));

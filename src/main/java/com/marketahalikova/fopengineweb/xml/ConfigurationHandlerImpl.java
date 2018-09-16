@@ -46,7 +46,7 @@ public class ConfigurationHandlerImpl implements  ConfigurationHandler{
         if (Optional.ofNullable(configuration.getFonts()).isPresent()) {
             for (com.marketahalikova.fopengineweb.xml.generated.Font xmlFont : configuration.getFonts().getFont()) {
                 Font font = readXmlFont(xmlFont);
-                project.getFontSet().add(font);
+                project.addFont(font);
             }
         }
 

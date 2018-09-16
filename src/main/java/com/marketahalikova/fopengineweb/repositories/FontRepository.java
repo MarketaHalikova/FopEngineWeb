@@ -3,9 +3,10 @@ package com.marketahalikova.fopengineweb.repositories;
 import com.marketahalikova.fopengineweb.model.Font;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface FontRepository extends CrudRepository<Font, Long> {
 
-    Optional<Font> findFontByFontName(String fontName);
+//    Optional<Font> findFontByFontNameAndProject_Id(String fontName);
+    List<Font> findAllByOrderByFontNameAsc();
 }

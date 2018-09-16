@@ -17,46 +17,85 @@
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<div class="container-fluid" style="margin-top: 100px">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-primary">
 
-                <div class="panel-heading">
+
+<div class="container-fluid" style="margin-top: 10px; margin-left: 10px">
+    <div class="row">
+        <div class="col-md-2">
+            <img src="../static/img/irs.jpg"
+                 th:src="@{/img/irs.jpg}" class="img-responsive">
+        </div>
+        <div class="col-md-4 col-md-offset-2 text-center">
+            <h1 style="font-size:500%;font-weight: bold;">Fop Engine</h1>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 50px">
+        <div class="col-md-10 col-md-offset-1">
+            <ul class="nav nav-tabs nav-justified" style="font-weight: bold">
+                <li class="active"><a href="#" th:href="@{'/'}">Projects</a></li>
+                <li><a href="#">Fonts</a></li>
+                <li><a href="#" >Project Tree</a></li>
+                <li><a href="#">Logs</a></li>
+                <li><a href="#">Generate</a></li>
+            </ul>
+            <div class="panel panel-primary "> <!--boarder???-->
+                <div class="row">
+                    <div class="col-md-2" style="margin: 25px 50px 0px 20px">
+                        <select id="projectListFilter" class="form-control" >
+                            <option selected value="All">All</option>
+                            <option value="Changed">Changed</option>
+                            <option value="Ok">Ok</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 pull-right" style="margin: 25px 50px 0px 20px">
+                        <a a href="/project/new" type="button" class="btn btn-success" style="padding: 10px 30px 10px 30px">New Project</a>
+                    </div>
+                </div>
+
+                <div class=" text-center" >
                     <h1>Project List</h1>
                 </div>
+
                 <!--/*@thymesVar id="project" type="com.marketahalikova.fopengineweb.model.Project"*/-->
                 <div class="panel-body">
-                    <div class="table-responsive"  th:if="${not #lists.isEmpty(projectList)}">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr class="bg-success">
-                                <th>ID</th>
-                                <th>Name</th>
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(projectList)}">
+                        <table class="table table-hover col-md-12" id="projects-table">
+                            <thead class="thead-inverse">
+                            <tr>
+                                <th>id</th>
+                                <th>projectName</th>
+                                <th>git path</th>
+                                <th>status</th>
                                 <th>View</th>
                             </tr>
                             </thead>
+                            <tbody>
                             <tr th:remove="all">
-                                <td>001</td>
-                                <td>Project 1</td>
+                                <td>123</td>
+                                <td>projectName</td>
+                                <td>gitPath</td>
+                                <td>projectStatus</td>
                                 <td><a href="#">View</a></td>
                             </tr>
-                            <tr th:remove="all">
-                                <td>002</td>
-                                <td>Project 2</td>
-                                <td><a href="#">View</a></td>
-                            </tr>
-                            <tr th:each="project : ${projectList}">
-                                <td th:text="${project.id}">003</td>
-                                <td th:text="${project.projectName}">Project 3</td>
+                            <tr th:each="project : ${projectList}" >
+                                <td th:text="${project.id}">123</td>
+                                <td th:text="${project.projectName}">projectName</td>
+                                <td th:text="${project.gitPath}">gitPath</td>
+                                <td th:text="${project.projectStatus}" class="status">projectStatus</td>
                                 <td><a href="#" th:href="@{'/project/' + ${project.id} + '/show'}">View</a></td>
                             </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div>
+    <script src="/js/main.js"></script>
 </div>
 
 </body>

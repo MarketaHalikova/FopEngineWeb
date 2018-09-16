@@ -45,9 +45,9 @@ public class UserconfigHandlerImpl implements UserconfigHandler{
             XmlUtils.getSingleNode(userConfigDocument,"/configuration/fonts", xPath).get().appendChild(parentNode);
         }
 
-        XmlUtils.updateOrCreateAttribute(parentNode, "metrics-file", fontTriplet.getMetricsFile().getFullTarget());
+        XmlUtils.updateOrCreateAttribute(parentNode, "metrics-file", "not implemented yet"); // todo fontTriplet.getMetricsFile().getFullTarget());
         XmlUtils.updateOrCreateAttribute(parentNode, "kerning", "no");
-        XmlUtils.updateOrCreateAttribute(parentNode, "embed-file", fontTriplet.getEmbedFile());
+        XmlUtils.updateOrCreateAttribute(parentNode, "embed-file",Paths.get( fontTriplet.getEmbedFileSource(), fontTriplet.getEmbedFile()).toString()); // todo fontTriplet.getEmbedFile());
         XmlUtils.updateOrCreateAttribute(tripletNode, "name", fontName);
         XmlUtils.updateOrCreateAttribute(tripletNode, "style", style);
         XmlUtils.updateOrCreateAttribute(tripletNode, "weight", weight);

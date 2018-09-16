@@ -5,12 +5,14 @@ import com.marketahalikova.fopengineweb.exceptions.GitException;
 import com.marketahalikova.fopengineweb.model.Project;
 import com.marketahalikova.fopengineweb.model.User;
 import com.marketahalikova.fopengineweb.services.FileSystemService;
+import org.apache.commons.io.FileUtils;
 import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
@@ -31,9 +33,12 @@ public class GitServiceFake implements GitService {
 
     @Override
     public Path cloneRepository(String gitPath, Path workingDirectory) throws GitException {
+        System.out.println("GitServiceFake is used");
         try {
             Path targetPath = fileSystemService.createProjectDirectory(gitPath);
-
+            if(Files.exists(targetPath)) {
+                FileUtils.deleteDirectory(targetPath.toFile());
+            }
             if(gitPath.contains("fopengine-test-repository_1")) {
                 FileUtil.copyDir(TEST_PROJECT_1.toFile(), targetPath.toFile());
             } else if(gitPath.contains("fopengine-test-repository_2")) {

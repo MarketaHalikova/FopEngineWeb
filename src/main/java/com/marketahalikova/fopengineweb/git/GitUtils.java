@@ -43,8 +43,10 @@ public class GitUtils {
                 setCloneAllBranches(cloneAll)
                 .setURI(url)
                 .setDirectory(new File(directory));
-        return command.call();
-
+        Git git = command.call();
+        git.getRepository().close();
+        git.close();
+        return git;
     }
 
 
