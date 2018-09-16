@@ -12,7 +12,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,15 +50,15 @@ public class ProjectServiceImplTest {
     @Test
     public void getProjectsTest() throws Exception {
         Project project = new Project();
-        Set projectsData = new HashSet();
+        List<Project> projectsData = new ArrayList<>();
         projectsData.add(project);
 
-        given(projectRepository.findAll()).willReturn(projectsData);
+        given(projectRepository.findAllByOrderByProjectNameAsc()).willReturn(projectsData);
 
-        Set<Project> recipes = projectService.getProjects();
+        Set<Project> projects = projectService.getProjects();
 
-        assertThat(recipes).hasSize(1);
-        verify(projectRepository, times(1)).findAll();
+        assertThat(projects).hasSize(1);
+        verify(projectRepository, times(1)).findAllByOrderByProjectNameAsc();
         verify(projectRepository, never()).findById(anyLong());
     }
 
