@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>fop-engine-web</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Simple GUI for maintainig of resources fof FopEngine</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

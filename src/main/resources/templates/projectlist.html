@@ -57,7 +57,7 @@
                     <h1>Project List</h1>
                 </div>
 
-                <!--/*@thymesVar id="project" type="com.marketahalikova.fopengineweb.model.Project"*/-->
+                <!--/*@thymesVar id="project" type="de.irs.fopengine.fopengineweb.model.Project"*/-->
                 <div class="panel-body">
                     <div class="table-responsive" th:if="${not #lists.isEmpty(projectList)}">
                         <table class="table table-hover col-md-12" id="projects-table">
@@ -74,14 +74,14 @@
                             <tr th:remove="all">
                                 <td>123</td>
                                 <td>projectName</td>
-                                <td>gitPath</td>
+                                <td>gitUrl</td>
                                 <td>projectStatus</td>
                                 <td><a href="#">View</a></td>
                             </tr>
                             <tr th:each="project : ${projectList}" >
                                 <td th:text="${project.id}">123</td>
                                 <td th:text="${project.projectName}">projectName</td>
-                                <td th:text="${project.gitPath}">gitPath</td>
+                                <td th:text="${project.gitUrl}">gitUrl</td>
                                 <td th:text="${project.projectStatus}" class="status">projectStatus</td>
                                 <td><a href="#" th:href="@{'/project/' + ${project.id} + '/show'}">View</a></td>
                             </tr>

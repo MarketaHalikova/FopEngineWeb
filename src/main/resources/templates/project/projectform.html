@@ -17,7 +17,7 @@
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 <body>
-<!--/*@thymesVar id="project" type="com.marketahalikova.fopengineweb.model.Project"*/-->
+<!--/*@thymesVar id="project" type="de.irs.fopengine.fopengineweb.model.Project"*/-->
 <div class="container-fluid" style="margin-top: 10px">
     <div class="row">
         <div class="col-md-2">
@@ -65,7 +65,7 @@
                                 <div class="row">
                                     <div class="col-md-12 form-group">
                                         <label>Project Git Link</label>
-                                        <input th:readonly="${project.id != null}" type="text" class="form-control" th:field="*{gitPath}">
+                                        <input th:readonly="${project.id != null}" type="text" class="form-control" th:field="*{gitUrl}">
                                         <label>Project Description</label>
                                         <textarea rows="6" class="form-control" th:field="*{description}">Description here</textarea>
                                     </div>

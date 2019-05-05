@@ -36,7 +36,7 @@
                 <li><a href="#">Generate</a></li>
             </ul>
 
-            <!--/*@thymesVar id="project" type="com.marketahalikova.fopengineweb.model.Project"*/-->
+            <!--/*@thymesVar id="project" type="de.irs.fopengine.fopengineweb.model.Project"*/-->
 
 
             <div class="panel panel-primary">
@@ -48,7 +48,7 @@
                 <div class="panel-body">
                     <label>Git link: </label>
                     <div>
-                        <textarea th:text="${project.gitPath}">project git link</textarea>
+                        <textarea th:text="${project.gitUrl}">project git link</textarea>
                     </div>
                     <label>Description:</label>
                     <div>
@@ -103,7 +103,7 @@
 <!--<a href="#" th:href="@{'/project/' + ${project.id} + '/delete'}" type="button" class="btn btn-primary">Delete</a>-->
 <!--</div>-->
 <!--</div>-->
-<!--&lt;!&ndash;/*@thymesVar id="project" type="com.marketahalikova.fopengineweb.model.Project"*/&ndash;&gt;-->
+<!--&lt;!&ndash;/*@thymesVar id="project" type="de.irs.fopengine.fopengineweb.model.Project"*/&ndash;&gt;-->
 <!--<div class="container">-->
 <!--<div class="panel panel-primary">-->
 <!--<div class="container-fluid" style="margin-top: 20px">-->
@@ -121,7 +121,7 @@
 <!--<div class="panel-body">-->
 <!--<label>Git link: </label>-->
 <!--<div>-->
-<!--<textarea th:text="${project.gitPath}">project git link</textarea>-->
+<!--<textarea th:text="${project.gitUrl}">project git link</textarea>-->
 <!--</div>-->
 <!--<label>Description:</label>-->
 <!--<div>-->
